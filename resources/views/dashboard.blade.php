@@ -38,6 +38,15 @@
                     return false;
                 } else {
                     document.getElementById('ferie').value = 0;
+                    var x = document.getElementById('hour').value;
+                    if(!Number.isInteger(x))
+                    {
+                        var int_part = Math.floor(x);
+                        var fractional = Math.round(x*100) - ( int_part * 100);
+                        var min = int_part * 60;
+                        var hour = min + fractional;
+                        document.getElementById('hour').value = hour;
+                    }
                     return true;
                 }
             }
