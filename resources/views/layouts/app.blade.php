@@ -24,6 +24,10 @@
             #dialog{
                 display: none;
             }
+
+            #farshad{
+                display: none;
+            }
         </style>
 
         @livewireStyles

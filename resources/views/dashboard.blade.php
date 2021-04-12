@@ -2,6 +2,7 @@
 
     @section('myScript')
         <script>
+            var global;
             $(document).ready(function(){
                 $('#ferie').click(function(){
                    $('.input').slideToggle();
@@ -101,7 +102,7 @@
                     customButtons: {
                         myCustomButton: {
                             text: 'fill this month',
-                            click: function (events) {
+                            click: function () {
 
                             }
                         }

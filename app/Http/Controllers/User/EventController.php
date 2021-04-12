@@ -45,6 +45,7 @@ class EventController extends Controller
             (new EventProvider($request))->store($request);
             return redirect()->back();
         }else{
+            //sweet alert not working
             return redirect()->back();
         }
     }
