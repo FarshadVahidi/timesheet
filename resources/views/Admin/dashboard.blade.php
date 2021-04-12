@@ -122,7 +122,7 @@
                     })
                 },
                 eventClick: function (info) {
-                    console.log(info);
+
                     $('#eventId').val(info.event.id);
                     $('#title').val(info.event.extendedProps.title);
                     $('#UpStart').val(convert(info.event.start));

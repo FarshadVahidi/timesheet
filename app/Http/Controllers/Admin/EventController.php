@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Providers\User\EventProvider;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -33,11 +34,18 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
+        if($entry === null){
+            (new EventProvider($request))->store($request);
+            return redirect()->back();
+        }else{
+            //sweet alert not working
+            return redirect()->back();
+        }
     }
 
     /**
@@ -71,7 +79,12 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $event = Event::findOrFail($request->eventId);
+        if($event !== null)
+        {
+            (new EventProvider($request))->update($request, $event);
+            return redirect()->back();
+        }
     }
 
     /**
