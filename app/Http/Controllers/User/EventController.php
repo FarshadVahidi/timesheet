@@ -43,9 +43,9 @@ class EventController extends Controller
         $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
         if($entry === null){
             (new EventProvider($request))->store($request);
-            return back();
+            return redirect()->back();
         }else{
-            dd('duplicate');
+            return redirect()->back();
         }
     }
 

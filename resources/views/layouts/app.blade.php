@@ -38,6 +38,14 @@
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.js"></script>
 
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script src="sweetalert2.all.min.js"></script>
+        <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+        <script src="//cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
+        <script src="sweetalert2.min.js"></script>
+        <link rel="stylesheet" href="sweetalert2.min.css">
+
+
         @yield('myScript');
 
     </head>
