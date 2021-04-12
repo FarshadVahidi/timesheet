@@ -18,7 +18,13 @@
         <!-- fullCalendar -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <link rel="stylesheet" href="/resources/demos/style.css">
+
+
+        <style>
+            #dialog{
+                display: none;
+            }
+        </style>
 
         @livewireStyles
 
