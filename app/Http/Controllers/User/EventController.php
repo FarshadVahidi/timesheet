@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Compound;
 
 class EventController extends Controller
 {
@@ -14,7 +16,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $events = Event::where('user_id', '=', auth()->user()->id)->get();
+        return response()->json($events);
     }
 
     /**
