@@ -38,4 +38,11 @@ class EventProvider extends ServiceProvider
         $event->hour = $request->hour;
         $event->save();
     }
+
+    public function update($request, $event)
+    {
+        $event->title = $request->title;
+        $event->hour = $request->UpHour;
+        $event->update();
+    }
 }

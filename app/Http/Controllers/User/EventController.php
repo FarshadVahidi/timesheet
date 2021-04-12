@@ -80,7 +80,12 @@ class EventController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request);
+        $event = Event::findOrFail($request->eventId);
+        if($event !== null)
+        {
+            (new EventProvider($request))->update($request, $event);
+            return redirect()->back();
+        }
     }
 
     /**

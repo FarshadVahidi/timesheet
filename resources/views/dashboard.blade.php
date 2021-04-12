@@ -2,9 +2,12 @@
 
     @section('myScript')
         <script>
-
             $(document).ready(function(){
                 $('#ferie').click(function(){
+                   $('.input').slideToggle();
+                });
+
+                $('#UpFerie').click(function(){
                    $('.input').slideToggle();
                 });
             });
@@ -57,10 +60,10 @@
                 if (temp) {
                     document.UpClick.UpHour.value = 0;
                     return true;
-                } else if (document.dayClick.UpHour.value > 8.0) {
+                } else if (document.UpClick.UpHour.value > 8.0) {
                     alert('Hour must be less than 8 hours!');
                     return false;
-                } else if (document.dayClick.UpHour.value < 0.0) {
+                } else if (document.UpClick.UpHour.value < 0.0) {
                     alert('Hour can not be less than zero!')
                     return false;
                 } else {
@@ -122,7 +125,12 @@
                         $('#eventId').val(info.event.id);
                         $('#title').val(info.event.extendedProps.title);
                         $('#UpStart').val(convert(info.event.start));
-                        $('#UpHour').val(info.event.extendedProps.hour);
+                        let total = info.event.extendedProps.hour;
+                        let hour = total / 60;
+                        hour = Math.floor(hour);
+                        let min = total % 60;
+                        let str = hour.toString() + '.' + min.toString();
+                        $('#UpHour').val(str);
                         $('#update').html('Update');
 
                         $('#farshad').dialog({
@@ -211,17 +219,17 @@
                                 <label class="form-check-label">Ferie</label>
                             </div>
 
+                            <div class="input">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>
+                                </div>
 
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>
+
+                                <div class="input-group flex-nowrap mb-3">
+                                    <span class="input-group-text" id="addon-wrapping">Hours</span>
+                                    <input type="number" step="0.01" id="UpHour" name="UpHour" class="form-control" placeholder="number">
+                                </div>
                             </div>
-
-
-                            <div class="input-group flex-nowrap mb-3">
-                                <span class="input-group-text" id="addon-wrapping">Hours</span>
-                                <input type="number" id="UpHour" name="UpHour" class="form-control" placeholder="number">
-                            </div>
-
 
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
