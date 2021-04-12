@@ -16,10 +16,11 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('title', 100);
+            $table->string('title', 100)->nullable();
             $table->dateTime('start');
             $table->dateTime('end');
             $table->integer('allDay');
+            $table->integer('hour');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('restrict');

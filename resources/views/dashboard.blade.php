@@ -135,7 +135,7 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">{{__('Description')}}</label>
-                                    <input type="text" class="form-control" id="description" name="description"
+                                    <input type="text" class="form-control" id="title" name="title"
                                            aria-describedby="description">
                                 </div>
 

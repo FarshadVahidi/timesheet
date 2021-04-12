@@ -4,8 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Providers\User\EventProvider;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Compound;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
@@ -38,7 +40,13 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
+        if($entry === null){
+            (new EventProvider($request))->store($request);
+            return back();
+        }else{
+            dd('duplicate');
+        }
     }
 
     /**
@@ -84,5 +92,16 @@ class EventController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function validateRequest(): array
+    {
+        return request()->validate([
+           'title' => 'required|string|max:100',
+           'start' => 'required',
+           'end' => 'required',
+           'allDay' => 'required',
+           'user_id' => 'required',
+        ]);
     }
 }
