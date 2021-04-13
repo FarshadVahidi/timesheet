@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\User;
 use App\Providers\User\EventProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 
 class EventController extends Controller
 {
@@ -16,18 +19,19 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        $events = DB::table('users')->join('events', 'user_id', '=', 'users.id')->select('user_id', 'start', 'end', 'allDay', 'hour', 'title', 'name')->get();
+//        $events = Event::all();
         return response()->json($events);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
-        //
+       //
     }
 
     /**
@@ -67,7 +71,10 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = DB::table('users')->join('events', 'user_id' , '=', 'users.id')->select('name', 'start', 'end', 'hour', 'title')
+            ->where('users.id' , '=' , $id)
+            ->get();
+        return View::make('Admin.user.edit', compact('data'));
     }
 
     /**

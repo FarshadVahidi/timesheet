@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\Admin\UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -13,11 +14,12 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return View::make('Admin.user.index', compact('users'));
     }
 
     /**
@@ -53,11 +55,14 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        if(!empty($user) && !empty($user->id)){
+            $allHour = (new UserProvider($user))->show($user);
+            return View::make('Admin.user.show', compact('allHour'));
+        }
     }
 
     /**

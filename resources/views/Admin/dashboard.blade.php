@@ -124,6 +124,7 @@
                 eventClick: function (info) {
 
                     $('#eventId').val(info.event.id);
+                    $('#upid').val(info.event.extendedProps.name);
                     $('#title').val(info.event.extendedProps.title);
                     $('#UpStart').val(convert(info.event.start));
                     let total = info.event.extendedProps.hour;
@@ -222,6 +223,12 @@
 
                         <div class="input">
                             <div class="mb-3">
+                                <label class="form-check-label">{{__('user')}}</label>
+                                <input type="text" class="form-control" id="upid" name="upid" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-check-label">{{__('date')}}</label>
                                 <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>
                             </div>
 
