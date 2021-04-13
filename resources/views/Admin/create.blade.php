@@ -30,6 +30,7 @@
                     {{ $errors->first('role_id') }}
                 </div>
 
+                @csrf
 
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -63,6 +64,8 @@
                     alert('choose role id for new user!');
                     return false;
                 }
+                document.myform.email.value = email+"@app.com";
+                return true;
 
             }
         </script>
