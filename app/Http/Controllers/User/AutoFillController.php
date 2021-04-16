@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Providers\User\EventProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class AutoFillController extends Controller
 {
@@ -65,11 +67,13 @@ class AutoFillController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function update(Request $request, $id)
     {
-        //
+
+        (new EventProvider($request))->AutoFill($request, $id);
+        return View::make('User.dashboard');
     }
 
     /**

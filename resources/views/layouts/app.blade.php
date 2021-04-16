@@ -28,6 +28,10 @@
             #farshad{
                 display: none;
             }
+
+            #fill{
+                display: none;
+            }
         </style>
 
         @livewireStyles

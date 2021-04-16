@@ -94,7 +94,16 @@
                         myCustomButton: {
                             text: 'fill this month',
                             click: function () {
-
+                                $('#monthStart').val(convert(calendar.view.currentStart));
+                                $('#monthEnd').val(convert(calendar.view.currentEnd));
+                                $('#fill').dialog({
+                                    draggable: true,
+                                    resizable: false,
+                                    position: 'center',
+                                    model: true,
+                                    show: {effect: 'clip', duration: 350},
+                                    hide: {effect: 'clip', duration: 350},
+                                })
                             }
                         }
                     },
@@ -153,6 +162,22 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 @section('mainContent')
                     <div id="calendar"></div>
+
+                    <div id="fill">
+                        <form id="fill-form" name="fill-form" method="POST" action="{{route('users.autofill.update', auth()->user()->id)}}">
+                            @csrf
+                            @method('PATCH')
+                            <div class="input">
+                                <label>{{__('You want to fill this month?')}}</label>
+                                <input name="monthStart" id="monthStart" hidden>
+                            </div>
+
+                            <div class="input">
+                                <input name="monthEnd" id="monthEnd" hidden>
+                            </div>
+                            <button type="submit" class="btn btn-primary">{{__('Submit')}}</button>
+                        </form>
+                    </div>
 
                     <div id="dialog">
                         <div id="dialog-body">

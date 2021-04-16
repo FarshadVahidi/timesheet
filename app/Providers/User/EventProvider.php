@@ -3,6 +3,7 @@
 namespace App\Providers\User;
 
 use App\Models\Event;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class EventProvider extends ServiceProvider
@@ -44,5 +45,34 @@ class EventProvider extends ServiceProvider
         $event->title = $request->title;
         $event->hour = $request->UpHour;
         $event->update();
+    }
+
+    public function AutoFill($request, $id)
+    {
+        $dt = Carbon::create($request->monthStart);
+        $de = Carbon::create($request->monthEnd);
+
+        while($dt < $de)
+        {
+            $tmp = Event::where('start', '=', $dt)->select('start')->where('user_id', '=', $id)->get();
+
+            if($tmp->isEmpty()) {
+                if ($dt->englishDayOfWeek !== "Saturday" && $dt->englishDayOfWeek !== "Sunday") {
+
+                    $event = new Event();
+                    $event->start = $dt->toDate();
+                    $event->end = $dt->addDay()->toDate();
+                    $event->hour = 8;
+                    $event->title = 'Auto Fill';
+                    $event->user_id = $id;
+                    $event->allDay = 1;
+                    $event->save();
+                }else{
+                    $dt->addDay();
+                }
+            }else{
+                $dt->addDay();
+            }
+        }
     }
 }

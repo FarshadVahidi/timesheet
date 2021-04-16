@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
         Route::group(['middleware' => 'role:user', 'prefix' => 'user', 'as' => 'users.'], function () {
             Route::resource('user', App\Http\Controllers\User\UserController::class);
             Route::resource('event', App\Http\Controllers\User\EventController::class);
-            Route::resource('autofill', App\Http\Controllers\User\AutofillController::class);
+            Route::resource('autofill', App\Http\Controllers\User\AutoFillController::class);
         });
 
         Route::group(['middleware' => 'role:administrator', 'prefix' => 'admin', 'as' => 'admins.'], function () {
