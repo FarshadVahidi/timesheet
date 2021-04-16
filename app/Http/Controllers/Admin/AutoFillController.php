@@ -71,7 +71,7 @@ class AutoFillController extends Controller
      */
     public function update(Request $request, $id)
     {
-        (new EventProvider($request))->AutoFill($request);
+        (new EventProvider($request))->AutoFill($request, $id);
         return View::make('Admin.dashboard');
     }
 

@@ -29,14 +29,14 @@ class EventProvider extends ServiceProvider
         //
     }
 
-    public function AutoFill($request)
+    public function AutoFill($request, $id)
     {
         $dt = Carbon::create($request->monthStart);
         $de = Carbon::create($request->monthEnd);
 
         while($dt < $de)
         {
-            $tmp = Event::where('start', '=', $dt)->select('start')->get();
+            $tmp = Event::where('start', '=', $dt)->select('start')->get()->where('user_id', '=', $id);
 
             if($tmp->isEmpty()) {
                 if ($dt->englishDayOfWeek !== "Saturday" && $dt->englishDayOfWeek !== "Sunday") {
