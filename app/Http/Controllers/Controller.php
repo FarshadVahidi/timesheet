@@ -10,4 +10,15 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function index(){
+        if(auth()->user()->hasRole('administrator'))
+        {
+            return view('Admin.dashboard');
+        }
+        if(auth()->user()->hasRole('user'))
+        {
+            return view('User.dashboard');
+        }
+    }
 }

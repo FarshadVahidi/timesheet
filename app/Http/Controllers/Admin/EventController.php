@@ -1,43 +1,47 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\User;
 use App\Providers\User\EventProvider;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
-use phpDocumentor\Reflection\Types\Compound;
-use Illuminate\Support\Facades\Validator;
+use Symfony\Component\VarDumper\Cloner\Data;
+
 
 class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $events = Event::where('user_id', '=', auth()->user()->id)->get();
+        $events = DB::table('users')->join('events', 'user_id', '=', 'users.id')->select('user_id', 'start', 'end', 'allDay', 'hour', 'title', 'name')->get();
+//        $events = Event::all();
         return response()->json($events);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
-        //
+       //
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -70,7 +74,6 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-// mysql> select DATE_FORMAT(start, '%Y-%m') as 'month', sum(hour) from events group by month;
         $alldata = Event::select([
             \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
             \DB::raw('SUM(hour) as amount')
@@ -87,7 +90,7 @@ class EventController extends Controller
             ];
         });
 
-        return View::make('User.edit', compact('alldata'));
+        return View::make('Admin.user.edit', compact('alldata'));
     }
 
     /**
@@ -97,7 +100,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $event = Event::findOrFail($request->eventId);
         if($event !== null)
@@ -116,16 +119,5 @@ class EventController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    private function validateRequest(): array
-    {
-        return request()->validate([
-           'title' => 'required|string|max:100',
-           'start' => 'required',
-           'end' => 'required',
-           'allDay' => 'required',
-           'user_id' => 'required',
-        ]);
     }
 }

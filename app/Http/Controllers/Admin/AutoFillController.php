@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Providers\Admin\EventProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
-class UserController extends Controller
+class AutoFillController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,7 +38,6 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
-        dd('store');
     }
 
     /**
@@ -66,11 +67,12 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function update(Request $request, $id)
     {
-        //
+        (new EventProvider($request))->AutoFill($request, $id);
+        return View::make('Admin.dashboard');
     }
 
     /**
