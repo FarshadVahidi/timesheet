@@ -88,32 +88,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $dt = Carbon::create($request->monthStart);
-        $de = Carbon::create($request->monthEnd);
 
-        while($dt < $de)
-        {
-            $tmp = Event::where('start', '=', $dt)->select('start')->get();
-
-            if($tmp->isEmpty()) {
-                if ($dt->englishDayOfWeek !== "Saturday" && $dt->englishDayOfWeek !== "Sunday") {
-
-                    $event = new Event();
-                    $event->start = $dt->toDate();
-                    $event->end = $dt->addDay()->toDate();
-                    $event->hour = 8;
-                    $event->title = 'Auto Fill';
-                    $event->user_id = auth()->user()->id;
-                    $event->allDay = 1;
-                    $event->save();
-                }else{
-                    $dt->addDay();
-                }
-            }else{
-                $dt->addDay();
-            }
-
-        }
 
     }
 

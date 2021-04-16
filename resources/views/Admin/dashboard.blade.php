@@ -156,7 +156,7 @@
                 <div id="calendar"></div>
 
                 <div id="fill">
-                    <form id="fill-form" name="fill-form" method="POST" action="{{route('admins.user.update', auth()->user())}}">
+                    <form id="fill-form" name="fill-form" method="POST" action="{{route('admins.autofill.update', auth()->user()->id)}}">
                         @csrf
                         @method('PATCH')
                         <div class="input">

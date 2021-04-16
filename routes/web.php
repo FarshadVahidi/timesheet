@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
         Route::group(['middleware' => 'role:administrator', 'prefix' => 'admin', 'as' => 'admins.'], function () {
             Route::resource('user', App\Http\Controllers\Admin\UserController::class);
             Route::resource('event', App\Http\Controllers\Admin\EventController::class);
+            Route::resource('autofill', App\Http\Controllers\Admin\AutoFillController::class);
 
         });
     });
