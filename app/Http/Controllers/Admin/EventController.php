@@ -78,6 +78,7 @@ class EventController extends Controller
             \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
             \DB::raw('SUM(hour) as amount')
         ])
+            ->where('user_id', '=', $id)
             ->groupBy('month')
             ->orderBy('month')
             ->get();
