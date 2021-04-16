@@ -34,7 +34,7 @@
             if (temp) {
                 document.dayClick.hour.value = 0;
                 return true;
-            } else if (document.dayClick.hour.value > 8.0) {
+            } else if (document.dayClick.hour.value > 7.59) {
                 alert('Hour must be less than 8 hours!');
                 return false;
             } else if (document.dayClick.hour.value < 0.0) {
@@ -42,15 +42,6 @@
                 return false;
             } else {
                 document.getElementById('ferie').value = 0;
-                var x = document.getElementById('hour').value;
-                if(!Number.isInteger(x))
-                {
-                    var int_part = Math.floor(x);
-                    var fractional = Math.round(x*100) - ( int_part * 100);
-                    var min = int_part * 60;
-                    var hour = min + fractional;
-                    document.getElementById('hour').value = hour;
-                }
                 return true;
             }
         }
@@ -69,15 +60,6 @@
                 return false;
             } else {
                 document.getElementById('UpFerie').value = 0;
-                var x = document.getElementById('UpHour').value;
-                if(!Number.isInteger(x))
-                {
-                    var int_part = Math.floor(x);
-                    var fractional = Math.round(x*100) - ( int_part * 100);
-                    var min = int_part * 60;
-                    var hour = min + fractional;
-                    document.getElementById('UpHour').value = hour;
-                }
                 return true;
             }
         }
@@ -103,7 +85,16 @@
                     myCustomButton: {
                         text: 'fill this month',
                         click: function () {
-
+                            $('#monthStart').val(convert(calendar.view.currentStart));
+                            $('#monthEnd').val(convert(calendar.view.currentEnd));
+                            $('#fill').dialog({
+                                draggable: true,
+                                resizable: false,
+                                position: 'center',
+                                model: true,
+                                show: {effect: 'clip', duration: 350},
+                                hide: {effect: 'clip', duration: 350},
+                            })
                         }
                     }
                 },
@@ -163,6 +154,22 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 @section('mainContent')
                 <div id="calendar"></div>
+
+                <div id="fill">
+                    <form id="fill-form" name="fill-form" method="POST" action="{{route('admins.user.update', auth()->user())}}">
+                        @csrf
+                        @method('PATCH')
+                        <div class="input">
+                            <label>{{__('You want to fill this month?')}}</label>
+                            <input name="monthStart" id="monthStart" hidden>
+                        </div>
+
+                        <div class="input">
+                            <input name="monthEnd" id="monthEnd" hidden>
+                        </div>
+                        <button type="submit" class="btn btn-primary">{{__('Submit')}}</button>
+                    </form>
+                </div>
 
                 <div id="dialog">
                     <div id="dialog-body">

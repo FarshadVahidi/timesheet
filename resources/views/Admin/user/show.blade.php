@@ -21,7 +21,7 @@
                     <tr>
                         <td>{{ $hour->start }}</td>
                         <td>{{ $hour->title }}</td>
-                        <td id="hour">{{$hour->hour}}</td>
+                        <td id="hour">{{ $hour->hour}}</td>
                     </tr>
                 @endforeach
                 </tbody>
