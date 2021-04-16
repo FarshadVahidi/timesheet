@@ -7,8 +7,8 @@
                 <thead>
                 <tr>
                     <th scope="col">{{ __('Month') }}</th>
-                    <th scopt="col">{{__('hour')}}</th>
-                    <th scope="col">{{ __('day') }}</th>
+                    <th scopt="col">{{__('Hour (total hour worked in month)')}}</th>
+                    <th scope="col">{{ __('Day (total / 8)') }}</th>
                 </tr>
                 </thead>
                 @foreach ($alldata as $data )
