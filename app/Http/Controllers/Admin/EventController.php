@@ -74,10 +74,29 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $data = DB::table('users')->join('events', 'user_id' , '=', 'users.id')->select('name', 'start', 'end', 'hour', 'title')
-            ->where('users.id' , '=' , $id)
+//        $data = DB::table('users')->join('events', 'user_id' , '=', 'users.id')->select('name', 'start', 'end', 'hour', 'title')
+//            ->where('users.id' , '=' , $id)
+//            ->get();
+        $alldata = Event::select([
+            \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
+            \DB::raw('SUM(hour) as amount')
+        ])
+            ->groupBy('month')
+            ->orderBy('month')
             ->get();
-        return View::make('Admin.user.edit', compact('data'));
+        $report = [];
+
+        $alldata->each(function($item) use (&$report) {
+            $report[$item->month][$item->hour] = [
+                'amount' => $item->amount
+            ];
+        });
+
+//        $alldata = DB::table("events")
+//            ->orderBy("start")
+//            ->groupBy("start")
+//            ->get(['start', DB::raw('SUM(hour) AS sum')]);
+        return View::make('Admin.user.edit', compact('alldata'));
     }
 
     /**
