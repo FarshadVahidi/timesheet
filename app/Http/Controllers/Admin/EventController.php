@@ -70,13 +70,10 @@ class EventController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit($id)
     {
-//        $data = DB::table('users')->join('events', 'user_id' , '=', 'users.id')->select('name', 'start', 'end', 'hour', 'title')
-//            ->where('users.id' , '=' , $id)
-//            ->get();
         $alldata = Event::select([
             \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
             \DB::raw('SUM(hour) as amount')
@@ -92,10 +89,6 @@ class EventController extends Controller
             ];
         });
 
-//        $alldata = DB::table("events")
-//            ->orderBy("start")
-//            ->groupBy("start")
-//            ->get(['start', DB::raw('SUM(hour) AS sum')]);
         return View::make('Admin.user.edit', compact('alldata'));
     }
 

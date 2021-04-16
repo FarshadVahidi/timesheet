@@ -17,6 +17,12 @@
                             {{ __('Dashboard') }}
                         </x-jet-nav-link>
                     </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('users.event.edit', auth()->user()->id) }}" :active="request()->routeIs('users.event.edit')">
+                            {{ __('Activity') }}
+                        </x-jet-nav-link>
+                    </div>
                 @endif
 
                 @if(auth()->user()->hasRole('administrator'))
@@ -34,7 +40,7 @@
 
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-jet-nav-link href="{{ route('admins.user.index') }}" :active="request()->routeIs('admins.user.index')">
-                            {{ __('Activation') }}
+                            {{ __('Activity For Each User') }}
                         </x-jet-nav-link>
                     </div>
                 @endif
