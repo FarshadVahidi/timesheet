@@ -82,7 +82,7 @@ class EventController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
     {
@@ -90,7 +90,7 @@ class EventController extends Controller
         if($event !== null)
         {
             (new EventProvider($request))->update($request, $event);
-            return redirect()->back();
+            return redirect(route('dashboard'));
         }
     }
 

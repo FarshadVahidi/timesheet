@@ -106,7 +106,7 @@ class EventController extends Controller
         if($event !== null)
         {
             (new EventProvider($request))->update($request, $event);
-            return redirect()->back();
+            return redirect(route('dashboard'));
         }
     }
 

@@ -3,6 +3,7 @@
 namespace App\Providers\Activiti;
 
 use App\Models\Event;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
 class ActivityProvider extends ServiceProvider
@@ -39,7 +40,7 @@ class ActivityProvider extends ServiceProvider
             ->get();
         $report = [];
 
-        $alldata->each(function($item) use (&$report) {
+        $alldata->each(function ($item) use (&$report) {
             $report[$item->month][$item->hour] = [
                 'amount' => $item->amount
             ];
@@ -55,17 +56,27 @@ class ActivityProvider extends ServiceProvider
         ])
             ->where('user_id', '=', $id)
             ->where('start', '>=', $dt)
-            ->where('start', '<' , $de)
+            ->where('start', '<', $de)
             ->groupBy('month')
             ->orderBy('month')
             ->get()->pluck('amount');
-//        $report = [];
-//
-//        $alldata->each(function($item) use (&$report) {
-//            $report[$item->month][$item->hour] = [
-//                'amount' => $item->amount
-//            ];
-//        });
+
         return $alldata;
+    }
+
+    public function monthPDF($dt, $de)
+    {
+        $data = DB::table('events')
+            ->select([
+                \DB::raw("DATE_FORMAT(start, '%Y-%m-%d') as month"),
+                'hour',
+                'title'
+            ])
+            ->where('start', '>=' , $dt)
+            ->where('start', '<', $de)
+            ->where('user_id', '=' , auth()->user()->id)
+            ->orderBy('start')
+            ->get();
+        return $data;
     }
 }

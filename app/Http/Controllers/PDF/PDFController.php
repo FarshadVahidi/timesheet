@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\User;
 use App\Providers\Activiti\ActivityProvider;
+use App\Providers\Pdf\PdfProvider;
 use Crabbly\Fpdf\Fpdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -28,17 +29,7 @@ class PDFController extends Controller
         $de = Carbon::create($month);
         $de->addMonth();
 
-        $data = DB::table('events')
-            ->select([
-                \DB::raw("DATE_FORMAT(start, '%Y-%m-%d') as month"),
-                'hour',
-                'title'
-            ])
-            ->where('start', '>=' , $dt)
-            ->where('start', '<', $de)
-            ->where('user_id', '=' , auth()->user()->id)
-            ->orderBy('start')
-            ->get();
+        $data = (new ActivityProvider($request))->monthPDF($dt, $de);
 
         $total = (new ActivityProvider($request))->month(auth()->user()->id, $dt, $de);
 
@@ -59,7 +50,7 @@ class PDFController extends Controller
         $this->fpdf->Cell(32, 5 , '', 0);
         $this->fpdf->Cell(47, 5, 'Mese di riferimento', 0);
         $this->fpdf->Cell(47, 5 , '', 0);
-        $this->fpdf->Cell(47, 5, $month, 0, 1);
+        $this->fpdf->Cell(47, 5, '', 0, 1);
 
         $this->fpdf->Cell(32, 5, '', 0, 0);
         $this->fpdf->Cell(47, 5, 'Risors', 0);
@@ -119,24 +110,22 @@ class PDFController extends Controller
             $this->fpdf->Cell(30, 8, $g->englishDayOfWeek, 'LR', 0, 'C');
 
             $this->fpdf->Cell(20, 8, $p->hour, 'LR',0, 'C');
+
             $txt = str_split($t, 20);
             $this->fpdf->Cell(40, 8, $txt[0], 'LR', 1, 'C');
 
             if($len > 20){
-
                 for($i=1 ; $i< $len/20 ; $i++){
-
                     $this->fpdf->Cell(30, 8, '', 0);
                     $this->fpdf->Cell(40, 8, '', 'LR' , 0);
                     $this->fpdf->Cell(30, 8, '', 'LR' , 0);
                     $this->fpdf->Cell(20, 8, '', 'LR' , 0);
                     $this->fpdf->Cell(40, 5, $txt[$i], 'LR', 1);
-
                 }
             }
         }
-            $this->fpdf->Cell(30, 8, '', 0,0);
-            $this->fpdf->Cell(130, 8, '', 'T', 0);
+        $this->fpdf->Cell(30, 8, '', 0,0);
+        $this->fpdf->Cell(130, 8, '', 'T', 0);
 
         $this->fpdf->Output();
         exit;

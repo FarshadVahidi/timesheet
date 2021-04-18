@@ -60,15 +60,6 @@
                     return false;
                 } else {
                     document.getElementById('UpFerie').value = 0;
-                    var x = document.getElementById('UpHour').value;
-                    if(!Number.isInteger(x))
-                    {
-                        var int_part = Math.floor(x);
-                        var fractional = Math.round(x*100) - ( int_part * 100);
-                        var min = int_part * 60;
-                        var hour = min + fractional;
-                        document.getElementById('UpHour').value = hour;
-                    }
                     return true;
                 }
             }
@@ -126,12 +117,12 @@
                         $('#eventId').val(info.event.id);
                         $('#title').val(info.event.extendedProps.title);
                         $('#UpStart').val(convert(info.event.start));
-                        let total = info.event.extendedProps.hour;
-                        let hour = total / 60;
-                        hour = Math.floor(hour);
-                        let min = total % 60;
-                        let str = hour.toString() + '.' + min.toString();
-                        $('#UpHour').val(str);
+                        // let total = info.event.extendedProps.hour;
+                        // let hour = total / 60;
+                        // hour = Math.floor(hour);
+                        // let min = total % 60;
+                        // let str = hour.toString() + '.' + min.toString();
+                        $('#UpHour').val(info.event.extendedProps.hour);
                         $('#update').html('Update');
 
                         $('#farshad').dialog({

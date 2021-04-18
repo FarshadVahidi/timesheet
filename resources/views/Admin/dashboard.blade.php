@@ -118,12 +118,12 @@
                     $('#upid').val(info.event.extendedProps.name);
                     $('#title').val(info.event.extendedProps.title);
                     $('#UpStart').val(convert(info.event.start));
-                    let total = info.event.extendedProps.hour;
-                    let hour = total / 60;
-                    hour = Math.floor(hour);
-                    let min = total % 60;
-                    let str = hour.toString() + '.' + min.toString();
-                    $('#UpHour').val(str);
+                    // let total = info.event.extendedProps.hour;
+                    // let hour = total / 60;
+                    // hour = Math.floor(hour);
+                    // let min = total % 60;
+                    // let str = hour.toString() + '.' + min.toString();
+                    $('#UpHour').val(info.event.extendedProps.hour);
                     $('#update').html('Update');
 
                     $('#farshad').dialog({
@@ -242,7 +242,7 @@
 
                             <div class="input-group flex-nowrap mb-3">
                                 <span class="input-group-text" id="addon-wrapping">Hours</span>
-                                <input type="number" step="0.01" id="UpHour" name="UpHour" class="form-control" placeholder="number">
+                                <input type="number" id="UpHour" name="UpHour" class="form-control">
                             </div>
                         </div>
 
