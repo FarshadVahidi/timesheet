@@ -9,6 +9,7 @@
                     <th scope="col">{{ __('Month') }}</th>
                     <th scopt="col">{{__('Hour (total hour worked in month)')}}</th>
                     <th scope="col">{{ __('Day (total / 8)') }}</th>
+                    <th scope="col">{{__('Print')}}</th>
                 </tr>
                 </thead>
                 @foreach ($alldata as $data )
@@ -16,6 +17,9 @@
                         <td>{{\Carbon\Carbon::parse($data->month)->format('F Y')}}</td>
                         <td>{{ $data->amount }}</td>
                         <td>{{ $data->amount / 8}}</td>
+                        <td>
+                            <a href="{{ route('users.PDF.show', $data->month) }}" class="btn btn-info">{{__('Print')}}</a>
+                        </td>
                     </tr>
                 @endforeach
                 <tbody>
