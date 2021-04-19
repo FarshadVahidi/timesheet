@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\VarDumper\Cloner\Data;
+use function PHPUnit\Framework\isEmpty;
 
 
 class EventController extends Controller
@@ -60,15 +61,17 @@ class EventController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
-        $allFerie = Event::where('ferie', '=' , true)
-            ->where('user_id', '=', $id)
-            ->orderBy('start')
-            ->get();
-        return View::make('Admin.ferie', compact('allFerie'));
+        if(!empty($id))
+        {
+            $allFerie = (new EventProvider($id))->show($id);
+            return View::make('Admin.ferie', compact('allFerie'));
+        }
+
+        return redirect(route('dashboard'));
     }
 
     /**

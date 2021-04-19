@@ -110,4 +110,12 @@ class EventProvider extends ServiceProvider
             $event->ferie = false;
         $event->save();
     }
+
+    public function show($id)
+    {
+        return Event::where('ferie', '=' , true)
+            ->where('user_id', '=', $id)
+            ->orderBy('start')
+            ->get();
+    }
 }
