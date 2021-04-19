@@ -23,17 +23,19 @@ class PDFController extends Controller
 
     }
 
-    public function show(Request $request, $month)
+    public function update(Request $request, $id)
     {
+        $month = $request->month;
         $dt = Carbon::create($month);
         $de = Carbon::create($month);
         $de->addMonth();
 
-        $data = (new ActivityProvider($request))->monthPDF($dt, $de);
+        $data = (new ActivityProvider($month))->monthPDF($id, $dt, $de);
 
-        $total = (new ActivityProvider($request))->month(auth()->user()->id, $dt, $de);
+        $total = (new ActivityProvider($month))->month($id, $dt, $de);
 
-        $userToPrint = User::findOrFail(auth()->user()->id);
+
+        $userToPrint = User::findOrFail($id);
 
         $this->fpdf = new FPDF('p', 'mm', 'A4');
         $this->fpdf->AddPage();
@@ -50,7 +52,7 @@ class PDFController extends Controller
         $this->fpdf->Cell(32, 5 , '', 0);
         $this->fpdf->Cell(47, 5, 'Mese di riferimento', 0);
         $this->fpdf->Cell(47, 5 , '', 0);
-        $this->fpdf->Cell(47, 5, '', 0, 1);
+        $this->fpdf->Cell(47, 5, $month, 0, 1);
 
         $this->fpdf->Cell(32, 5, '', 0, 0);
         $this->fpdf->Cell(47, 5, 'Risors', 0);
@@ -120,7 +122,7 @@ class PDFController extends Controller
                     $this->fpdf->Cell(40, 8, '', 'LR' , 0);
                     $this->fpdf->Cell(30, 8, '', 'LR' , 0);
                     $this->fpdf->Cell(20, 8, '', 'LR' , 0);
-                    $this->fpdf->Cell(40, 5, $txt[$i], 'LR', 1);
+                    $this->fpdf->Cell(40, 8, $txt[$i], 'LR', 1);
                 }
             }
         }

@@ -36,7 +36,7 @@ class EventProvider extends ServiceProvider
 
         while($dt < $de)
         {
-            $tmp = Event::where('start', '=', $dt)->select('start')->get()->where('user_id', '=', $id);
+            $tmp = Event::where('start', '=', $dt)->select('start')->where('user_id', '=', $id)->get();
 
             if($tmp->isEmpty()) {
                 if ($dt->englishDayOfWeek !== "Saturday" && $dt->englishDayOfWeek !== "Sunday") {

@@ -32,10 +32,11 @@ class ActivityProvider extends ServiceProvider
     {
         $alldata = Event::select([
             \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
-            \DB::raw('SUM(hour) as amount')
+            \DB::raw('SUM(hour) as amount'),
+            'user_id',
         ])
             ->where('user_id', '=', $id)
-            ->groupBy('month')
+            ->groupBy('month', 'user_id')
             ->orderBy('month')
             ->get();
         $report = [];
@@ -64,7 +65,7 @@ class ActivityProvider extends ServiceProvider
         return $alldata;
     }
 
-    public function monthPDF($dt, $de)
+    public function monthPDF($id, $dt, $de)
     {
         $data = DB::table('events')
             ->select([
@@ -74,7 +75,7 @@ class ActivityProvider extends ServiceProvider
             ])
             ->where('start', '>=' , $dt)
             ->where('start', '<', $de)
-            ->where('user_id', '=' , auth()->user()->id)
+            ->where('user_id', '=' , $id)
             ->orderBy('start')
             ->get();
         return $data;

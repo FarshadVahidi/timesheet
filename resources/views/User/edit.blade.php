@@ -18,7 +18,12 @@
                         <td>{{ $data->amount }}</td>
                         <td>{{ $data->amount / 8}}</td>
                         <td>
-                            <a href="{{ route('users.PDF.show', $data->month) }}" class="btn btn-info">{{__('Print')}}</a>
+                            <form method="POST" action="{{route('users.PDF.update', $data->user_id)}}">
+                                @csrf
+                                @method('PATCH')
+                                <input id="month" name="month" value={{$data->month}} hidden>
+                                <button type="submit" class="btn btn-info">{{__('Print')}}</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
