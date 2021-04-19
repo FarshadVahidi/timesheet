@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\User;
-use App\Providers\User\EventProvider;
+use App\Providers\Admin\EventProvider;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -75,22 +75,7 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $alldata = Event::select([
-            \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
-            \DB::raw('SUM(hour) as amount'),
-            'user_id'
-        ])
-            ->where('user_id', '=', $id)
-            ->groupBy('month', 'user_id')
-            ->orderBy('month')
-            ->get();
-        $report = [];
-
-        $alldata->each(function($item) use (&$report) {
-            $report[$item->month][$item->hour] = [
-                'amount' => $item->amount
-            ];
-        });
+        $alldata = (new EventProvider($id))->edit($id);
 
         return View::make('Admin.user.edit', compact('alldata'));
     }
