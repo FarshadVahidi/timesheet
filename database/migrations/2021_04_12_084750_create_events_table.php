@@ -21,6 +21,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('end');
             $table->integer('allDay');
             $table->float('hour');
+            $table->boolean('ferie')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('restrict');
