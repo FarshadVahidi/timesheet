@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\User;
-use App\Providers\User\EventProvider;
+use App\Providers\Admin\EventProvider;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +22,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = DB::table('users')->join('events', 'user_id', '=', 'users.id')->select('user_id', 'start', 'end', 'allDay', 'hour', 'title', 'name')->get();
+        $events = DB::table('users')->join('events', 'user_id', '=', 'users.id')
+            ->select('events.id','user_id', 'start', 'end', 'allDay', 'hour', 'title', 'name')->get();
 //        $events = Event::all();
         return response()->json($events);
     }
@@ -48,10 +49,10 @@ class EventController extends Controller
         $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
         if($entry === null){
             (new EventProvider($request))->store($request);
-            return redirect()->back();
+            return redirect(route('dashboard'));
         }else{
             //sweet alert not working
-            return redirect()->back();
+            return redirect(route('dashboard'));
         }
     }
 
@@ -74,21 +75,7 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $alldata = Event::select([
-            \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
-            \DB::raw('SUM(hour) as amount')
-        ])
-            ->where('user_id', '=', $id)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-        $report = [];
-
-        $alldata->each(function($item) use (&$report) {
-            $report[$item->month][$item->hour] = [
-                'amount' => $item->amount
-            ];
-        });
+        $alldata = (new EventProvider($id))->edit($id);
 
         return View::make('Admin.user.edit', compact('alldata'));
     }
@@ -98,16 +85,17 @@ class EventController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $event = Event::findOrFail($request->eventId);
         if($event !== null)
         {
             (new EventProvider($request))->update($request, $event);
-            return redirect()->back();
+            return redirect(route('dashboard'));
         }
+
     }
 
     /**

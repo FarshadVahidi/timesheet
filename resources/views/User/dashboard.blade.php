@@ -20,13 +20,7 @@
                 let year = '' + d.getFullYear();
                 if (month.length < 2) month = '0' + month;
                 if (day.length < 2) day = '0' + day;
-                let hour = '' + d.getHours();
-                let minutes = '' + d.getMinutes();
-                if (hour.length < 2) hour = '0' + hour;
-                if (minutes.length < 2) minutes = '0' + minutes;
-                let seconds = '' + d.getSeconds();
-                if (seconds.length < 2) seconds = '0' + seconds;
-                return [year, month, day].join('-') + ' ' + [hour, minutes, seconds].join(':');
+                return [year, month, day].join('-') ;
             }
 
             function validateForm() {
@@ -60,15 +54,6 @@
                     return false;
                 } else {
                     document.getElementById('UpFerie').value = 0;
-                    var x = document.getElementById('UpHour').value;
-                    if(!Number.isInteger(x))
-                    {
-                        var int_part = Math.floor(x);
-                        var fractional = Math.round(x*100) - ( int_part * 100);
-                        var min = int_part * 60;
-                        var hour = min + fractional;
-                        document.getElementById('UpHour').value = hour;
-                    }
                     return true;
                 }
             }
@@ -122,16 +107,11 @@
                         })
                     },
                     eventClick: function (info) {
-                        console.log(info);
                         $('#eventId').val(info.event.id);
+                        alert(info.event.id);
                         $('#title').val(info.event.extendedProps.title);
                         $('#UpStart').val(convert(info.event.start));
-                        let total = info.event.extendedProps.hour;
-                        let hour = total / 60;
-                        hour = Math.floor(hour);
-                        let min = total % 60;
-                        let str = hour.toString() + '.' + min.toString();
-                        $('#UpHour').val(str);
+                        $('#UpHour').val(info.event.extendedProps.hour);
                         $('#update').html('Update');
 
                         $('#farshad').dialog({

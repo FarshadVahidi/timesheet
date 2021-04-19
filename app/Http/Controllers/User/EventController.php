@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Providers\Activiti\ActivityProvider;
 use App\Providers\User\EventProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -71,21 +72,7 @@ class EventController extends Controller
     public function edit($id)
     {
 // mysql> select DATE_FORMAT(start, '%Y-%m') as 'month', sum(hour) from events group by month;
-        $alldata = Event::select([
-            \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
-            \DB::raw('SUM(hour) as amount')
-        ])
-            ->where('user_id', '=', $id)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-        $report = [];
-
-        $alldata->each(function($item) use (&$report) {
-            $report[$item->month][$item->hour] = [
-                'amount' => $item->amount
-            ];
-        });
+        $alldata = (new ActivityProvider(\request()))->edit($id);
 
         return View::make('User.edit', compact('alldata'));
     }
@@ -95,7 +82,7 @@ class EventController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
     {
@@ -103,7 +90,7 @@ class EventController extends Controller
         if($event !== null)
         {
             (new EventProvider($request))->update($request, $event);
-            return redirect()->back();
+            return redirect(route('dashboard'));
         }
     }
 

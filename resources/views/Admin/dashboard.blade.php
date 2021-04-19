@@ -20,13 +20,7 @@
             let year = '' + d.getFullYear();
             if (month.length < 2) month = '0' + month;
             if (day.length < 2) day = '0' + day;
-            let hour = '' + d.getHours();
-            let minutes = '' + d.getMinutes();
-            if (hour.length < 2) hour = '0' + hour;
-            if (minutes.length < 2) minutes = '0' + minutes;
-            let seconds = '' + d.getSeconds();
-            if (seconds.length < 2) seconds = '0' + seconds;
-            return [year, month, day].join('-') + ' ' + [hour, minutes, seconds].join(':');
+            return [year, month, day].join('-');
         }
 
         function validateForm() {
@@ -34,7 +28,7 @@
             if (temp) {
                 document.dayClick.hour.value = 0;
                 return true;
-            } else if (document.dayClick.hour.value > 7.59) {
+            } else if (document.dayClick.hour.value > 8.0) {
                 alert('Hour must be less than 8 hours!');
                 return false;
             } else if (document.dayClick.hour.value < 0.0) {
@@ -48,6 +42,7 @@
 
         function validateFormUpdate() {
             let temp = document.getElementById('UpFerie').checked;
+
 
             if (temp) {
                 document.UpClick.UpHour.value = 0;
@@ -113,17 +108,11 @@
                     })
                 },
                 eventClick: function (info) {
-
                     $('#eventId').val(info.event.id);
                     $('#upid').val(info.event.extendedProps.name);
-                    $('#title').val(info.event.extendedProps.title);
+                    $('#uptitle').val(info.event.title);
                     $('#UpStart').val(convert(info.event.start));
-                    let total = info.event.extendedProps.hour;
-                    let hour = total / 60;
-                    hour = Math.floor(hour);
-                    let min = total % 60;
-                    let str = hour.toString() + '.' + min.toString();
-                    $('#UpHour').val(str);
+                    $('#UpHour').val(info.event.extendedProps.hour);
                     $('#update').html('Update');
 
                     $('#farshad').dialog({
@@ -143,11 +132,6 @@
 
     @endsection
 
-    {{--    <x-slot name="header">--}}
-        {{--        <h2 class="font-semibold text-xl text-gray-800 leading-tight">--}}
-            {{--            {{ __('Dashboard') }}--}}
-            {{--        </h2>--}}
-        {{--    </x-slot>--}}
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -242,13 +226,13 @@
 
                             <div class="input-group flex-nowrap mb-3">
                                 <span class="input-group-text" id="addon-wrapping">Hours</span>
-                                <input type="number" step="0.01" id="UpHour" name="UpHour" class="form-control" placeholder="number">
+                                <input type="number" id="UpHour" name="UpHour" class="form-control">
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="title" name="title"
+                            <input type="text" class="form-control" id="uptitle" name="uptitle"
                                    aria-describedby="description">
                         </div>
 

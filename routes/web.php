@@ -31,13 +31,22 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
             Route::resource('user', App\Http\Controllers\User\UserController::class);
             Route::resource('event', App\Http\Controllers\User\EventController::class);
             Route::resource('autofill', App\Http\Controllers\User\AutoFillController::class);
+            Route::resource('PDF' , App\Http\Controllers\PDF\PDFController::class);
         });
 
         Route::group(['middleware' => 'role:administrator', 'prefix' => 'admin', 'as' => 'admins.'], function () {
             Route::resource('user', App\Http\Controllers\Admin\UserController::class);
             Route::resource('event', App\Http\Controllers\Admin\EventController::class);
             Route::resource('autofill', App\Http\Controllers\Admin\AutoFillController::class);
+            Route::resource('PDF' , App\Http\Controllers\PDF\PDFController::class);
+        });
 
+        Route::get('/clear-all-cache', function () {
+            Artisan::call('cache:clear');
+            \Illuminate\Support\Facades\Artisan::call('route:clear');
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
+            \Illuminate\Support\Facades\Artisan::call('config:clear');
+            echo "Cleared all caches successfully.";
         });
     });
 

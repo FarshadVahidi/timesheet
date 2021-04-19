@@ -36,7 +36,7 @@ class EventProvider extends ServiceProvider
 
         while($dt < $de)
         {
-            $tmp = Event::where('start', '=', $dt)->select('start')->get()->where('user_id', '=', $id);
+            $tmp = Event::where('start', '=', $dt)->select('start')->where('user_id', '=', $id)->get();
 
             if($tmp->isEmpty()) {
                 if ($dt->englishDayOfWeek !== "Saturday" && $dt->englishDayOfWeek !== "Sunday") {
@@ -57,5 +57,32 @@ class EventProvider extends ServiceProvider
             }
 
         }
+    }
+
+    public function edit($id)
+    {
+        $alldata = Event::select([
+            \DB::raw("DATE_FORMAT(start, '%Y-%m') as month"),
+            \DB::raw('SUM(hour) as amount'),
+            'user_id'
+        ])
+            ->where('user_id', '=', $id)
+            ->groupBy('month', 'user_id')
+            ->orderBy('month')
+            ->get();
+        $report = [];
+
+        $alldata->each(function($item) use (&$report) {
+            $report[$item->month][$item->hour] = [
+                'amount' => $item->amount
+            ];
+        });
+        return $alldata;
+    }
+    public function update($request, $event)
+    {
+        $event->title = $request->uptitle;
+        $event->hour = $request->UpHour;
+        $event->update();
     }
 }
