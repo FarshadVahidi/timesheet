@@ -133,5 +133,66 @@ class PDFController extends Controller
         exit;
     }
 
+    public function show($month)
+    {
 
+    }
+
+    public function index ()
+    {
+        $dt = \Carbon\Carbon::now();
+        $allFerie = Event::select([
+            \DB::raw("DATE_FORMAT(start, '%Y-%m-%d') as month"),
+        ])->where('ferie', '=' , true)->where('start', '>', $dt)->orderBy('start')->get();
+
+        $this->fpdf = new FPDF('p', 'mm', 'A4');
+        $this->fpdf->AddPage();
+
+        $this->fpdf->SetFont('Arial', 'B',  14);
+
+        $this->fpdf->Cell(189, 35, '', 0, 1);
+
+        $this->fpdf->Cell(189, 5, 'Rapporto dei prossimi Ferie', 0, 1, 'C');
+        $this->fpdf->Cell(189, 15, '', 0, 1);
+        $this->fpdf->Cell(59, 5, '', 0, 1);
+
+        $this->fpdf->Cell(28, 5, '',0);
+        $this->fpdf->Cell(47, 5, 'Date di domanda', 0);
+        $this->fpdf->Cell(5, 5, '', 0);
+        $this->fpdf->Cell(47, 5, '', 0);
+        $this->fpdf->Cell(47, 5, $dt, 0 , 1);
+        $this->fpdf->Cell(189, 35, '',0, 1);
+
+        $this->fpdf->Cell(50, 8, '', 0);
+        $this->fpdf->Cell(40, 8, 'Mese', 1, 0, 'C');
+        $this->fpdf->Cell(30, 8, 'Giorno', 1, 1, 'C');
+
+        foreach($allFerie as $p)
+        {
+
+            $g = \Carbon\Carbon::create($p->month);
+
+            $this->fpdf->Cell(50, 8, '', 0);
+
+            $this->fpdf->Cell(40, 8, $p->month, 'LR', 0, 'C');
+
+            $this->fpdf->Cell(30, 8, $g->englishDayOfWeek, 'LR', 1, 'C');
+
+        }
+        $this->fpdf->Cell(50, 8, '', 0,0);
+        $this->fpdf->Cell(70, 30, '', 'T', 1);
+
+        $this->fpdf->Cell(38, 5, '', 0);
+        $this->fpdf->Cell(38, 5, 'Data', 0);
+        $this->fpdf->Cell(38, 5, '', 0);
+        $this->fpdf->Cell(38, 5, 'Firma' , 0, 1);
+        $this->fpdf->Cell(38, 15, '', 0);
+        $this->fpdf->Cell(38, 15, '_____________', 0);
+        $this->fpdf->Cell(38, 15, '', 0);
+        $this->fpdf->Cell(38, 15, '_____________' , 0, 1);
+
+
+        $this->fpdf->Output();
+        exit;
+    }
 }

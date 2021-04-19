@@ -23,6 +23,13 @@
                             {{ __('Activity') }}
                         </x-jet-nav-link>
                     </div>
+
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('users.event.show', auth()->user()->id) }}" :active="request()->routeIs('users.event.show')">
+                            {{ __('All My Ferie') }}
+                        </x-jet-nav-link>
+                    </div>
                 @endif
 
                 @if(auth()->user()->hasRole('administrator'))
