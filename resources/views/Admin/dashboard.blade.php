@@ -27,6 +27,7 @@
             let temp = document.getElementById('ferie').checked;
             if (temp) {
                 document.dayClick.hour.value = 0;
+                document.dayClick.title.value = "FERIE";
                 return true;
             } else if (document.dayClick.hour.value > 8.0) {
                 alert('Hour must be less than 8 hours!');
@@ -186,13 +187,12 @@
                                     <span class="input-group-text" id="addon-wrapping">{{ __('Hours') }}</span>
                                     <input type="number" step="0.01" id="hour" name="hour" class="form-control" placeholder="number">
                                 </div>
-                            </div>
 
-
-                            <div class="mb-3">
-                                <label class="form-label">{{__('Description')}}</label>
-                                <input type="text" class="form-control" id="title" name="title"
-                                       aria-describedby="description">
+                                <div class="mb-3">
+                                    <label class="form-label">{{__('Description')}}</label>
+                                    <input type="text" class="form-control" id="title" name="title"
+                                           aria-describedby="description">
+                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-primary">{{__('Submit')}}</button>
@@ -228,12 +228,12 @@
                                 <span class="input-group-text" id="addon-wrapping">Hours</span>
                                 <input type="number" id="UpHour" name="UpHour" class="form-control">
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="uptitle" name="uptitle"
-                                   aria-describedby="description">
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <input type="text" class="form-control" id="uptitle" name="uptitle"
+                                       aria-describedby="description">
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update</button>

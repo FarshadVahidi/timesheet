@@ -64,7 +64,11 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        $allFerie = Event::where('ferie', '=' , true)
+            ->where('user_id', '=', $id)
+            ->orderBy('start')
+            ->get();
+        return View::make('Admin.ferie', compact('allFerie'));
     }
 
     /**

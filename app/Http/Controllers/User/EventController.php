@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Providers\Activiti\ActivityProvider;
 use App\Providers\User\EventProvider;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use phpDocumentor\Reflection\Types\Compound;
@@ -60,7 +61,9 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        $dt = Carbon::now();
+        $allFerie = Event::where('ferie', '=' , true)->where('start', '>', $dt)->orderBy('start')->get();
+        return View::make('User.ferie', compact('allFerie'));
     }
 
     /**

@@ -37,6 +37,10 @@ class EventProvider extends ServiceProvider
         $event->allDay = $request->allDay;
         $event->title = $request->title;
         $event->hour = $request->hour;
+        if($request->has('ferie'))
+            $event->ferie = true;
+        else
+            $event->ferie = false;
         $event->save();
     }
 
@@ -44,6 +48,10 @@ class EventProvider extends ServiceProvider
     {
         $event->title = $request->uptitle;
         $event->hour = $request->UpHour;
+        if(! $request->has('UpFerie'))
+            $event->ferie = false;
+        else
+            $event->ferie = true;
         $event->update();
     }
 
@@ -66,6 +74,7 @@ class EventProvider extends ServiceProvider
                     $event->title = 'Auto Fill';
                     $event->user_id = $id;
                     $event->allDay = 1;
+                    $event->ferie = false;
                     $event->save();
                 }else{
                     $dt->addDay();
