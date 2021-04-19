@@ -34,6 +34,12 @@
                                           href="{{ route('admins.event.edit', $user->id) }}">{{ __('Activation for each month') }}</a></p>
                                 </div>
                             </div>
+                            <div class="btn-group">
+                                <div>
+                                    <p><a class="btn btn-info"
+                                          href="{{ route('admins.event.show', $user->id) }}">{{ __('All Ferie') }}</a></p>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

@@ -81,8 +81,33 @@ class EventProvider extends ServiceProvider
     }
     public function update($request, $event)
     {
-        $event->title = $request->uptitle;
-        $event->hour = $request->UpHour;
+        if($request->has('UpFerie'))
+        {
+            $event->ferie = true;
+            $event->hour = 0;
+            $event->title = "FERIE";
+        }else{
+            $event->title = $request->uptitle;
+            $event->hour = $request->UpHour;
+            $event->ferie = false;
+        }
+
         $event->update();
+    }
+
+    public function store($request)
+    {
+        $event = new Event();
+        $event->user_id = $request->user()->id;
+        $event->start = $request->start;
+        $event->end = $request->end;
+        $event->allDay = $request->allDay;
+        $event->title = $request->title;
+        $event->hour = $request->hour;
+        if($request->has('ferie'))
+            $event->ferie = true;
+        else
+            $event->ferie = false;
+        $event->save();
     }
 }
