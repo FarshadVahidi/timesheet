@@ -48,6 +48,7 @@ class EventProvider extends ServiceProvider
                     $event->title = 'Auto Fill';
                     $event->user_id = auth()->user()->id;
                     $event->allDay = 1;
+                    $event->ferie = false;
                     $event->save();
                 }else{
                     $dt->addDay();
