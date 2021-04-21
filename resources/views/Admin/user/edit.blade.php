@@ -1,22 +1,30 @@
 <x-app-layout>
-    @section('mainContent')
-        <div class="card-header">{{__('Report')}}</div>
 
-        <div class="card-body">
+    @section('MyStyles')
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css"
+              href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    @endsection
+
+    @section('mainContent')
+
+
+        <div class="cal-md-1">
             <table class="table table-bordered data-table" id="datatable">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('Month') }}</th>
-                    <th scopt="col">{{__('Hour (total hour worked in month)')}}</th>
-                    <th scope="col">{{ __('Day (total / 8)') }}</th>
-                    <th scope="col">{{__('Action')}}</th>
+                    <th scope="col">{{ __('Hour') }}</th>
+                    <th scope="col">{{ __('Day') }}</th>
+                    <th scope="col">{{ __('Action') }}</th>
                 </tr>
                 </thead>
-                @foreach ($alldata as $data )
+                <tbody>
+                @foreach($alldata as $data)
                     <tr>
                         <td>{{\Carbon\Carbon::parse($data->month)->format('F Y')}}</td>
                         <td>{{ $data->amount }}</td>
-                        <td>{{ $data->amount / 8}}</td>
+                        <td>{{ $data->amount / 8 }}</td>
                         <td>
                             <form method="POST" action="{{route('admins.PDF.update', $data->user_id)}}">
                                 @csrf
@@ -27,10 +35,26 @@
                         </td>
                     </tr>
                 @endforeach
-                <tbody>
                 </tbody>
             </table>
         </div>
 
+    @endsection
+
+    @section('myScript')
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    responsive: true
+                })
+            });
+        </script>
     @endsection
 </x-app-layout>

@@ -67,6 +67,7 @@
                 timeZone: 'local',
                 locale: 'it',
                 firstDay: 1,
+                handleWindowResize: true,
                 headerToolbar: {
                     left: 'prev,next today myCustomButton',
                     center: 'title',
@@ -140,7 +141,7 @@
                 @section('mainContent')
                 <div id="calendar"></div>
 
-                <div id="fill">
+                <div class="cal-md-1" id="fill">
                     <form id="fill-form" name="fill-form" method="POST" action="{{route('admins.autofill.update', auth()->user()->id)}}">
                         @csrf
                         @method('PATCH')
@@ -156,7 +157,7 @@
                     </form>
                 </div>
 
-                <div id="dialog">
+                <div class="cal-md-1" id="dialog">
                     <div id="dialog-body">
                         <form id="dayClick" name="dayClick" method="POST" action="{{ route('admins.event.store') }}"
                               onsubmit="return validateForm()">
@@ -200,7 +201,7 @@
                     </div>
                 </div>
 
-                <div id="farshad">
+                <div class="cal-md-1" id="farshad">
                     <form id="UpClick" name="UpClick" method="POST" action="{{ route('admins.event.update', 'eventId') }}"
                           onsubmit="return validateFormUpdate()">
                         @method('PATCH')
