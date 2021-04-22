@@ -45,11 +45,9 @@ class UserController extends Controller
     public function store(Request $request): \Illuminate\Contracts\View\View
     {
         if (!empty($request)) {
-            if (!empty($this->validateRequest())) {
                 UserService::store($request);
                 Session::flash('message', 'User add to Data base');
                 return View::make('Admin.create');
-            }
         }
         Session::flash('error', 'There was problem!');
         return View::make('Admin.create');
@@ -104,14 +102,14 @@ class UserController extends Controller
         //
     }
 
-    private function validateRequest()
+    private function validateRequest(): bool
     {
-        $data = request()->validate([
+        request()->validate([
             'name' => 'required|string|max:50',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|min:8',
             'role_id' => 'required|string'
         ]);
-        return $data;
+        return true;
     }
 }

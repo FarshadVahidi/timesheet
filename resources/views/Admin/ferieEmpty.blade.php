@@ -12,17 +12,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($allFerie as $ferie)
                     <tr>
-                        <td>{{\Carbon\Carbon::parse($ferie->start)->format('Y F d D')}}</td>
+                        <td>{{__('There is no ferie for this user')}}</td>
                     </tr>
-                @endforeach
-
                 </tbody>
             </table>
-            <div class="">
-                <a href="{{route('admins.PDF.show', $ferie->user_id)}}" class="btn btn-info">print</a>
-            </div>
         </div>
     @endsection
 </x-app-layout>

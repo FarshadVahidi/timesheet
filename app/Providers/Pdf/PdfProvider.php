@@ -29,11 +29,6 @@ class PdfProvider extends ServiceProvider
         //
     }
 
-    public function makePdf($data, $total)
-    {
-
-    }
-
     public function show($id)
     {
         $dt = \Carbon\Carbon::now();

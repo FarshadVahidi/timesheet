@@ -71,9 +71,11 @@ class EventController extends Controller
         if(!empty($id))
         {
             $allFerie = EventService::show($id);
-            return View::make('Admin.ferie', compact('allFerie'));
+            if(!empty($allFerie[0])) {
+                return View::make('Admin.ferie', compact('allFerie'));
+            }else
+                return View::make('Admin.ferieEmpty');
         }
-
         return redirect(route('dashboard'));
     }
 

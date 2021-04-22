@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Providers\Activiti\ActivityProvider;
 use App\Providers\User\EventProvider;
+use App\Services\Activity\ActivityService;
 use App\Services\User\EventService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use phpDocumentor\Reflection\Types\Compound;
 use Illuminate\Support\Facades\Validator;
@@ -83,10 +85,15 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-// mysql> select DATE_FORMAT(start, '%Y-%m') as 'month', sum(hour) from events group by month;
-        $alldata = (new ActivityProvider(\request()))->edit($id);
-
-        return View::make('User.edit', compact('alldata'));
+        if(!empty($id))
+        {
+            // mysql> select DATE_FORMAT(start, '%Y-%m') as 'month', sum(hour) from events group by month;
+            $alldata = ActivityService::edit($id);
+            Session::flash('message', 'edit successfully!');
+            return View::make('User.edit', compact('alldata'));
+        }
+        Session::flash('error', 'there was a problem');
+        return View::make('User.dashboard');
     }
 
     /**
