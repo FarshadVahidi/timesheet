@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\User;
 use App\Providers\Admin\UserProvider;
+use App\Services\Admin\EventService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
@@ -21,7 +22,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = EventService::index();
         return View::make('Admin.user.index', compact('users'));
     }
 
@@ -32,7 +33,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('Admin.create');
+        return View::make('Admin.create');
     }
 
     /**
@@ -45,12 +46,12 @@ class UserController extends Controller
     {
         if (!empty($request)) {
             if (!empty($this->validateRequest())) {
-                (new UserProvider($request))->store($request);
+                EventService::store($request);
                 Session::flash('message', 'User add to Data base');
                 return View::make('Admin.create');
             }
         }
-        Session::flash('message', 'There was problem!');
+        Session::flash('error', 'There was problem!');
         return View::make('Admin.create');
     }
 
@@ -63,7 +64,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         if(!empty($user) && !empty($user->id)){
-            $allHour = (new UserProvider($user))->show($user);
+            $allHour = EventService::show($user);
             return View::make('Admin.user.show', compact('allHour'));
         }
     }
