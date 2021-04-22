@@ -1,28 +1,36 @@
 <x-app-layout>
 
-    @section('mainContent')
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
 
-        <div class="card-header">{{__('Ferie')}}</div>
+                @section('mainContent')
 
-        <div class="card-body">
-            <table class="table table-bordered data-table" id="datatable">
-                <thead>
-                <tr>
-                    <th scope="col">{{ __('Data') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach ($allFerie as $ferie)
-                    <tr>
-                        <td>{{\Carbon\Carbon::parse($ferie->start)->format('Y F d D')}}</td>
-                    </tr>
-                @endforeach
+                    <div class="card-header">{{__('Ferie')}}</div>
 
-                </tbody>
-            </table>
-            <div class="">
-                <a href="{{route('admins.PDF.show', $ferie->user_id)}}" class="btn btn-info">print</a>
+                    <div class="card-body">
+                        <table class="table table-bordered data-table" id="datatable">
+                            <thead>
+                            <tr>
+                                <th scope="col">{{ __('Data') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($allFerie as $ferie)
+                                <tr>
+                                    <td>{{\Carbon\Carbon::parse($ferie->start)->format('Y F d D')}}</td>
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+                        <div class="">
+                            <a href="{{route('admins.PDF.show', $ferie->user_id)}}" class="btn btn-info">print</a>
+                        </div>
+                    </div>
+                @endsection
             </div>
         </div>
-    @endsection
+    </div>
+
 </x-app-layout>
