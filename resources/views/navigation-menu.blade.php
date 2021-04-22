@@ -174,9 +174,41 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-jet-responsive-nav-link>
+{{--            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">--}}
+{{--                {{ __('Dashboard') }}--}}
+{{--            </x-jet-responsive-nav-link>--}}
+
+            @if(auth()->user()->hasRole('user'))
+
+                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-jet-responsive-nav-link>
+
+                    <x-jet-responsive-nav-link href="{{ route('users.event.edit', auth()->user()->id) }}" :active="request()->routeIs('users.event.edit')">
+                        {{ __('Activity') }}
+                    </x-jet-responsive-nav-link>
+
+                    <x-jet-responsive-nav-link href="{{ route('users.event.show', auth()->user()->id) }}" :active="request()->routeIs('users.event.show')">
+                        {{ __('All My Ferie') }}
+                    </x-jet-responsive-nav-link>
+
+            @endif
+
+            @if(auth()->user()->hasRole('administrator'))
+
+                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-jet-responsive-nav-link>
+
+                    <x-jet-responsive-nav-link href="{{ route('admins.user.create') }}" :active="request()->routeIs('admins.user.create')">
+                        {{ __('Add New User') }}
+                    </x-jet-responsive-nav-link>
+
+                    <x-jet-responsive-nav-link href="{{ route('admins.user.index') }}" :active="request()->routeIs('admins.user.index')">
+                        {{ __('Activity For Each User') }}
+                    </x-jet-responsive-nav-link>
+
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

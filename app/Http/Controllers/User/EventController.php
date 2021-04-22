@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Providers\Activiti\ActivityProvider;
 use App\Providers\User\EventProvider;
+use App\Services\Activity\ActivityService;
+use App\Services\User\EventService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use phpDocumentor\Reflection\Types\Compound;
 use Illuminate\Support\Facades\Validator;
@@ -17,11 +20,12 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        $events = Event::where('user_id', '=', auth()->user()->id)->get();
+//        $events = Event::where('user_id', '=', auth()->user()->id)->get();
+        $events = EventService::index(auth()->user()->id);
         return response()->json($events);
     }
 
@@ -45,7 +49,9 @@ class EventController extends Controller
     {
         $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
         if($entry === null){
-            (new EventProvider($request))->store($request);
+//            (new EventProvider($request))->store($request);
+//            return redirect()->back();
+            EventService::store($request);
             return redirect()->back();
         }else{
             //sweet alert not working
@@ -57,13 +63,18 @@ class EventController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
-        $dt = Carbon::now();
-        $allFerie = Event::where('ferie', '=' , true)->where('start', '>', $dt)->orderBy('start')->get();
-        return View::make('User.ferie', compact('allFerie'));
+        if(!empty($id))
+        {
+            $allFerie = EventService::show($id);
+            return View::make('User.ferie', compact('allFerie'));
+        }else{
+            // put sweet alert for error
+        }
+
     }
 
     /**
@@ -74,10 +85,15 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-// mysql> select DATE_FORMAT(start, '%Y-%m') as 'month', sum(hour) from events group by month;
-        $alldata = (new ActivityProvider(\request()))->edit($id);
-
-        return View::make('User.edit', compact('alldata'));
+        if(!empty($id))
+        {
+            // mysql> select DATE_FORMAT(start, '%Y-%m') as 'month', sum(hour) from events group by month;
+            $alldata = ActivityService::edit($id);
+            Session::flash('message', 'edit successfully!');
+            return View::make('User.edit', compact('alldata'));
+        }
+        Session::flash('error', 'there was a problem');
+        return View::make('User.dashboard');
     }
 
     /**
@@ -92,7 +108,8 @@ class EventController extends Controller
         $event = Event::findOrFail($request->eventId);
         if($event !== null)
         {
-            (new EventProvider($request))->update($request, $event);
+//            (new EventProvider($request))->update($request, $event);
+            EventService::update($request, $event);
             return redirect(route('dashboard'));
         }
     }

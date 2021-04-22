@@ -2,12 +2,16 @@
 
     @section('MyStyles')
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
     @endsection
 
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
     @section('mainContent')
 
 
-        <div>
+        <div class="cal-md-1">
             <table class="table table-bordered data-table" id="datatable">
                 <thead>
                 <tr>
@@ -31,7 +35,7 @@
                             <div class="btn-group">
                                 <div>
                                     <p><a class="btn btn-info"
-                                          href="{{ route('admins.event.edit', $user->id) }}">{{ __('Activation for each month') }}</a></p>
+                                          href="{{ route('admins.event.edit', $user->id) }}">{{ __('Each month') }}</a></p>
                                 </div>
                             </div>
                             <div class="btn-group">
@@ -48,6 +52,10 @@
         </div>
 
     @endsection
+                </div>
+            </div>
+        </div>
+
 
     @section('myScript')
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -56,9 +64,12 @@
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
         <script>
             $(document).ready(function () {
-                $('#datatable').DataTable()
+                $('#datatable').DataTable({
+                    responsive: true
+                })
             });
         </script>
     @endsection

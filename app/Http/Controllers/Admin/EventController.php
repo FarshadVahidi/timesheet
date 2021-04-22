@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\User;
 use App\Providers\Admin\EventProvider;
+use App\Services\Admin\EventService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\VarDumper\Cloner\Data;
 use function PHPUnit\Framework\isEmpty;
@@ -23,8 +25,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = DB::table('users')->join('events', 'user_id', '=', 'users.id')
-            ->select('events.id','user_id', 'start', 'end', 'allDay', 'hour', 'title', 'name')->get();
+        $events = EventService::index();
 //        $events = Event::all();
         return response()->json($events);
     }
@@ -49,10 +50,12 @@ class EventController extends Controller
     {
         $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
         if($entry === null){
-            (new EventProvider($request))->store($request);
+            EventService::store($request);
+            Session::flash('message', 'stored successfuly');
             return redirect(route('dashboard'));
         }else{
             //sweet alert not working
+            Session::flash('error', 'There was problem');
             return redirect(route('dashboard'));
         }
     }
@@ -67,10 +70,12 @@ class EventController extends Controller
     {
         if(!empty($id))
         {
-            $allFerie = (new EventProvider($id))->show($id);
-            return View::make('Admin.ferie', compact('allFerie'));
+            $allFerie = EventService::show($id);
+            if(!empty($allFerie[0])) {
+                return View::make('Admin.ferie', compact('allFerie'));
+            }else
+                return View::make('Admin.ferieEmpty');
         }
-
         return redirect(route('dashboard'));
     }
 
@@ -82,9 +87,15 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $alldata = (new EventProvider($id))->edit($id);
+        if(!empty($id))
+        {
+            $alldata = EventService::edit($id);
+            Session::flash('message', 'edit Successfully');
+            return View::make('Admin.user.edit', compact('alldata'));
+        }
+        Session::flash('error', 'there was problem on edit');
+        return redirect(route('dashboard'));
 
-        return View::make('Admin.user.edit', compact('alldata'));
     }
 
     /**
@@ -99,9 +110,12 @@ class EventController extends Controller
         $event = Event::findOrFail($request->eventId);
         if($event !== null)
         {
-            (new EventProvider($request))->update($request, $event);
+            EventService::update($request, $event);
+            Session::flash('message', 'update successfully!');
             return redirect(route('dashboard'));
         }
+        Session::flash('error', 'there was a problem');
+        return redirect(route('dashboard'));
 
     }
 

@@ -2,7 +2,7 @@
 
     @section('myScript')
         <script>
-            var global;
+
             $(document).ready(function(){
                 $('#ferie').click(function(){
                     $('.input').slideToggle();

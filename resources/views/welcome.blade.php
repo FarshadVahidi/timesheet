@@ -20,14 +20,39 @@
             }
         </style>
     </head>
-    <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
+    <body class="antialiased cal-md-1">
+
+
+
+
+    <!-- Hamburger -->
+    <div class="-mr-2 flex items-center sm:hidden">
+        <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
+            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Responsive Navigation Menu -->
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        <div class="pt-2 pb-3 space-y-1">
+                        <x-jet-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('login') }}
+                        </x-jet-responsive-nav-link>
+
+        </div>
+    </div>
+
+
+        <div class="cal-md-1 relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block cal-md-1">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 underline">Dashboard</a>
+                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 underline col-lg-2">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Log in</a>
+                        <a href="{{ route('login') }}" class="text-sm text-gray-700 underline col-md-1">Log in</a>
 
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
@@ -36,7 +61,7 @@
                 </div>
             @endif
 
-            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 col-md-1">
                 <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
                     <svg viewBox="0 0 651 192" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto text-gray-700 sm:h-20">
                         <g clip-path="url(#clip0)" fill="#EF3B2D">
