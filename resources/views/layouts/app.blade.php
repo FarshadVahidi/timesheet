@@ -32,6 +32,11 @@
             #fill{
                 display: none;
             }
+
+            .fc-header-left, fc-header-center, fc-header-right{
+                width: 100%;
+                display: block;
+            }
         </style>
 
         @livewireStyles
@@ -54,7 +59,7 @@
         <link rel="stylesheet" href="sweetalert2.min.css">
 
 
-        @yield('myScript');
+        @yield('myScript')
 
     </head>
     <body class="font-sans antialiased">
@@ -78,7 +83,7 @@
                 <div class="py-md-12">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                            <div class=" cal-md-1 p-6 sm:px-20 bg-white border-b border-gray-200">
+                            <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                                 @yield('mainContent')
                             </div>
                         </div>
