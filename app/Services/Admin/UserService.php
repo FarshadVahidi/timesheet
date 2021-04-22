@@ -25,6 +25,13 @@ class UserService{
 
     public static function show($user)
     {
-        return Event::where('user_id', '=', $user->id)->orderByRaw('start')->get();
+        return Event::select([
+            \DB::raw("DATE_FORMAT(start, '%Y-%m-%d') as start"),
+            'title',
+            'hour',
+        ])
+            ->where('user_id', '=', $user->id)
+            ->orderByRaw('start')
+            ->get();
     }
 }
