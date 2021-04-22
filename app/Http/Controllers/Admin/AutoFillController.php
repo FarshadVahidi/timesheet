@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Providers\Admin\EventProvider;
+use App\Services\Admin\EventService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
 class AutoFillController extends Controller
@@ -71,8 +73,15 @@ class AutoFillController extends Controller
      */
     public function update(Request $request, $id)
     {
-        (new EventProvider($request))->AutoFill($request, $id);
+        if(!empty($id) && !empty($request))
+        {
+            EventService::AutoFill($request, $id);
+            Session::flash('message', 'update successfully!');
+            return View::make('Admin.dashboard');
+        }
+        Session::flash('error', 'there was a problem');
         return View::make('Admin.dashboard');
+
     }
 
     /**
