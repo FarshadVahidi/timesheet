@@ -21,6 +21,10 @@ Route::get('/', function () {
 //    return view('dashboard');
 //})->name('dashboard');
 
+Route::get('test', function(){
+   Storage::disk('google')->put('test.txt', 'hello world');
+});
+
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
     Route::get('/dashboard', [\App\Http\Controllers\Controller::class, 'index'])->name('dashboard');
 });
@@ -32,6 +36,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
             Route::resource('event', App\Http\Controllers\User\EventController::class);
             Route::resource('autofill', App\Http\Controllers\User\AutoFillController::class);
             Route::resource('PDF' , App\Http\Controllers\PDF\PDFController::class);
+            Route::resource('Google', App\Http\Controllers\User\GoogleDriveController::class);
         });
 
         Route::group(['middleware' => 'role:administrator', 'prefix' => 'admin', 'as' => 'admins.'], function () {

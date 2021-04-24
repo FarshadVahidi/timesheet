@@ -9,12 +9,14 @@
         "crabbly/fpdf-laravel": "^1.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
+        "google/apiclient": "^2.9",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/jetstream": "^2.3",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.0",
+        "nao-pon/flysystem-google-drive": "~1.1",
         "santigarcor/laratrust": "^6.3"
     },
     "require-dev": {
