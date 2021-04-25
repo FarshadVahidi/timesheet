@@ -43,7 +43,7 @@
                             <tbody>
                             @foreach($orders as $order)
                                 <tr>
-                                    <td>{{ $order->customer_id }}</td>
+                                    <td>{{ $order->name }}</td>
                                     <td>{{ $order->start }}</td>
                                     <td>{{ $order->end }}</td>
                                     <td>{{ $order->cost }}</td>
@@ -51,7 +51,7 @@
                                         <div class="btn-group">
                                             <div>
                                                 <p><a class="btn btn-primary"
-                                                      href="{{route('admins.Order.show', $order->id)}}">{{ __('Detail') }}</a>
+                                                      href="{{route('admins.Order.show', $order->customer_id)}}">{{ __('Detail') }}</a>
                                                 </p>
                                             </div>
                                         </div>

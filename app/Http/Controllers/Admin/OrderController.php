@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Order;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
 class OrderController extends Controller
@@ -18,8 +21,16 @@ class OrderController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\View
     {
-        $orders = Order::all();
-        return View::make('Admin.order.index', compact('orders'));
+        try{
+            $orders = Order::join('companies', 'companies.id' , '=', 'orders.customer_id')
+                ->select('orders.id', 'companies.name', 'orders.start', 'orders.end', 'orders.cost', 'orders.customer_id')
+                ->get();
+            return View::make('Admin.order.index', compact('orders'));
+        }catch(Exception $e){
+            Session::flash('error', 'There was a problem on database');
+            return redirect()->back();
+        }
+
     }
 
     /**
@@ -66,18 +77,46 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        if(!empty($id)){
+            try{
+                $order = Order::join('companies', 'companies.id', '=', 'orders.customer_id')
+                    ->select('orders.id as order_id', 'customer_id', 'start', 'end', 'days', 'cost', 'companies.name as name')
+                    ->where('customer_id', '=', $id)
+                    ->get();
+
+                return View::make('Admin.order.show', compact('order'));
+            }catch(\Exception $e){
+                Session::flash('error', 'There is problem on database');
+                return redirect()->back();
+            }
+        }else{
+            Session::flash('error', 'There is problem on your request');
+            return redirect()->back();
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function edit($id)
     {
-        //
+        if(!empty($id)){
+            try{
+                $path = Order::select('file')->where('id', '=', $id)->get();
+                $path = str_replace('orders','public/orders', $path->pluck('file')[0]);
+                return Storage::response($path);
+            }catch(Exception $e){
+                Session::flash('error', 'There was problem on extract data from database');
+                return redirect()->back();
+            }
+
+        }else{
+            Session::flash('error', 'Company id was empty');
+            return redirect()->back();
+        }
     }
 
     /**
