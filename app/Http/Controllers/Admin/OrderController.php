@@ -23,12 +23,19 @@ class OrderController extends Controller
     {
         try{
             $orders = Order::join('companies', 'companies.id' , '=', 'orders.customer_id')
-                ->select('orders.id', 'companies.name', 'orders.start', 'orders.end', 'orders.cost', 'orders.customer_id')
+                ->select([
+                    'orders.start',
+                    'orders.end',
+                    'orders.id',
+                    'companies.name',
+                    'orders.cost',
+                    'orders.customer_id'])
                 ->get();
+
             return View::make('Admin.order.index', compact('orders'));
         }catch(Exception $e){
             Session::flash('error', 'There was a problem on database');
-            return redirect()->back();
+            return View::make('Admin.dashboard');
         }
 
     }
@@ -81,7 +88,7 @@ class OrderController extends Controller
             try{
                 $order = Order::join('companies', 'companies.id', '=', 'orders.customer_id')
                     ->select('orders.id as order_id', 'customer_id', 'start', 'end', 'days', 'cost', 'companies.name as name')
-                    ->where('customer_id', '=', $id)
+                    ->where('orders.id', '=', $id)
                     ->get();
 
                 return View::make('Admin.order.show', compact('order'));
@@ -128,7 +135,21 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(!empty($id) && !empty($request)){
+            if(!empty($this->validateRequest())){
+                $order = Order::findOrfail($id);
+                $order->update($request->all());
+                $this->storeFile($order);
+                Session::flash('message', 'Order update successfully');
+                return redirect()->back();
+            }else{
+                Session::flash('error', 'input has problem');
+                return redirect()->back();
+            }
+        }else{
+            Session::flash('error', 'Request had problem');
+            return redirect()->back();
+        }
     }
 
     /**

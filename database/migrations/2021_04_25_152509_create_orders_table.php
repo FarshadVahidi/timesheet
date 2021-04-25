@@ -17,8 +17,8 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->unsignedBigInteger('customer_id');
-            $table->timestamp('start');
-            $table->timestamp('end');
+            $table->date('start');
+            $table->date('end');
             $table->integer('days');
             $table->integer('cost');
             $table->string('file')->nullable();

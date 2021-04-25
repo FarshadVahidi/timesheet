@@ -17,8 +17,8 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('title', 100)->nullable();
-            $table->dateTime('start');
-            $table->dateTime('end');
+            $table->date('start');
+            $table->date('end');
             $table->integer('allDay');
             $table->float('hour');
             $table->boolean('ferie')->default(false);

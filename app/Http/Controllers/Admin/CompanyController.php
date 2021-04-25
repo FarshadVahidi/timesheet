@@ -19,7 +19,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
+        $companies = Company::where('id', '<>', 1)->get();
         return View::make('Admin.company.index', compact('companies'));
     }
 
