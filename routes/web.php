@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
             Route::resource('PDF' , App\Http\Controllers\PDF\PDFController::class);
             Route::resource('Company', App\Http\Controllers\Admin\CompanyController::class);
             Route::resource('Contract', App\Http\Controllers\Admin\ContractController::class);
+            Route::resource('Order', App\Http\Controllers\Admin\OrderController::class);
         });
 
         Route::get('/clear-all-cache', function () {
