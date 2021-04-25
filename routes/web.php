@@ -21,9 +21,6 @@ Route::get('/', function () {
 //    return view('dashboard');
 //})->name('dashboard');
 
-Route::get('test', function(){
-   Storage::disk('google')->put('test.txt', 'hello world');
-});
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
     Route::get('/dashboard', [\App\Http\Controllers\Controller::class, 'index'])->name('dashboard');

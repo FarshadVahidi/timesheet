@@ -23,11 +23,11 @@ class GoogleDriveController extends Controller
      */
     public function index()
     {
-//        Storage::disk('google')->put('test.txt', 'hello world');  THIS ONE IS WORKING
+//        Storage::disk('google')->put('test.txt', 'hello world'); // THIS ONE IS WORKING
 
         $pdf = PdfService::index()->output();
+
         try{
-//            file("pdf")->store("", "google");
             Storage::disk('google')->put('timesheet.pdf', $pdf);
             Session::flash('message', 'file uploaded to you google drive');
             return redirect()->back();
