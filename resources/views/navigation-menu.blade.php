@@ -208,6 +208,10 @@
                         {{ __('Activity For Each User') }}
                     </x-jet-responsive-nav-link>
 
+                    <x-jet-responsive-nav-link href="{{ route('admins.Company.create') }}" :active="request()->routeIs('admins.Company.create')">
+                        {{ __('Create Company') }}
+                    </x-jet-responsive-nav-link>
+
             @endif
         </div>
 
