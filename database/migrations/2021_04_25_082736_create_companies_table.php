@@ -15,6 +15,10 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->string('p_iva');
+            $table->string('name');
+            $table->unsignedBigInteger('contract')->nullable();
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }
