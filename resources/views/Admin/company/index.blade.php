@@ -51,13 +51,6 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="btn-group">
-                                            <div>
-                                                <p><a class="btn btn-info"
-                                                      href="#">{{ __('Update') }}</a>
-                                                </p>
-                                            </div>
-                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
