@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
 class CompanyController extends Controller
@@ -36,7 +39,20 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        dd('store work');
+        if(!empty($this->validateRequest())) {
+            try {
+                $request->request->add(['company_id' => 1]);
+                $company = Company::create($request->all());
+                $this->storeFile($company);
+                Session::flash('message', 'Company saved in database successfully!');
+                return redirect()->back();
+            } catch (Exception $d) {
+                Session::flash('error', 'There was on store method');
+                return redirect()->back();
+            }
+        }
+        Session::flash('error', 'Validation problem check input');
+        return redirect()->back();
     }
 
     /**
@@ -82,5 +98,31 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function validateRequest()
+    {
+        return tap(request()->validate([
+            'name' => 'required|string|max:50',
+            'p_iva' => 'required|string',
+        ]), function(){
+            if(request()->hasFile('file'))
+            {
+                request()->validate([
+                   'file' => 'file',
+                ]);
+            }
+        });
+    }
+
+    private function storeFile($company)
+    {
+
+        if(request()->hasFile('file'))
+        {
+            $company->update([
+                'file' => request()->file->store('contract', 'public'),
+            ]);
+        }
     }
 }

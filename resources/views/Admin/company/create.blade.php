@@ -26,20 +26,20 @@
                         </script>
                     @endif
 
-                    <form class="row g-3" name="myforlm" action="{{ route('admins.Company.store') }}" method="POST" onsubmit="return validateForm()">
+                    <form class="row g-3" name="myForm" id="myForm" action="{{ route('admins.Company.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                         <div class="col-md-6">
                             <label for="name" class="form-label">{{__('Company Name')}}</label>
-                            <input type="text" class="form-control" name="name" id="name" required="required" value="{{ old('name')}}">
+                            <input type="text" class="form-control" name="name" id="name"  value="{{ old('name')}}">
                         </div>
 
                         <div class="col-md-6">
                             <label for="name" class="form-label">{{__('Company P.IVA')}}</label>
-                            <input type="text" class="form-control" name="piva" id="piva" required="required" value="{{ old('piva')}}">
+                            <input type="text" class="form-control" name="p_iva" id="p_iva"  value="{{ old('p_iva')}}">
                         </div>
 
-                        <div class="form-group d-flex flex-column">
-                            <label for="file" class="py-2">{{__('Contract file')}}</label>
-                            <input type="file" name="contract" id="contract" class="py-2">
+                        <div class="form-group d-flex flex-column py-4">
+                            <label for="file" class="py-2 mx-3">{{__('Contract file')}}</label>
+                            <input type="file" name="file" id="file" class="py-2 mx-3">
                         </div>
 
                         @csrf
@@ -56,8 +56,10 @@
     @section('myScript')
         <script>
             function validateForm() {
-                let name = document.myform.name.value;
+                let name = document.forms["myForm"]["name"].value;
+                alert(name);
                 let piva = document.myform.piva.value;
+                alert(piva);
                 if (name.length > 50) {
                     alert('name can not be too long!');
                     return false;
@@ -70,13 +72,12 @@
                     alert('P.Iva required!');
                     return false;
                 }
-                if(!piva.length === 10)
+                if(piva.length > 10 && piva.length < 10)
                 {
                     alert('Chack P.Iva')
                     return false;
                 }
-                return true;
-
+                return false;
             }
         </script>
     @endsection
