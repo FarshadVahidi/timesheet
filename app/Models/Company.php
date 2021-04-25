@@ -11,4 +11,13 @@ class Company extends Model
 
     protected $guarded = [] ;
 
+    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Company::class)->using(Order::class);
+    }
 }

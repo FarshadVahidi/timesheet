@@ -55,12 +55,12 @@
                         </x-jet-nav-link>
                     </div>
 
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-jet-nav-link href="{{ route('admins.Company.create') }}"
-                                        :active="request()->routeIs('admins.Company.create')">
-                            {{ __('Create Company') }}
-                        </x-jet-nav-link>
-                    </div>
+{{--                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">--}}
+{{--                        <x-jet-nav-link href="{{ route('admins.Company.create') }}"--}}
+{{--                                        :active="request()->routeIs('admins.Company.create')">--}}
+{{--                            {{ __('Create Company') }}--}}
+{{--                        </x-jet-nav-link>--}}
+{{--                    </div>--}}
 
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-jet-nav-link href="{{ route('admins.Company.index') }}"
@@ -245,10 +245,10 @@
                     {{ __('Activity For Each User') }}
                 </x-jet-responsive-nav-link>
 
-                <x-jet-responsive-nav-link href="{{ route('admins.Company.create') }}"
-                                           :active="request()->routeIs('admins.Company.create')">
-                    {{ __('Create Company') }}
-                </x-jet-responsive-nav-link>
+{{--                <x-jet-responsive-nav-link href="{{ route('admins.Company.create') }}"--}}
+{{--                                           :active="request()->routeIs('admins.Company.create')">--}}
+{{--                    {{ __('Create Company') }}--}}
+{{--                </x-jet-responsive-nav-link>--}}
 
                 <x-jet-responsive-nav-link href="{{ route('admins.Company.index') }}"
                                            :active="request()->routeIs('admins.Company.index')">

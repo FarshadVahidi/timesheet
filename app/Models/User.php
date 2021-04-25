@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(event::class);
     }
+
+    public function company(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
 }
