@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
 class OrderController extends Controller
@@ -40,7 +41,21 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        dd('work');
+        if(!empty($request)){
+            if(!empty($this->validateRequest())){
+                $request->request->add(['company_id' => 1]);
+                $order = Order::create($request->all());
+                $this->storeFile($order);
+                Session::flash('message', 'Order successfully saved!');
+                return redirect()->back();
+            }else{
+                Session::flash('error','please check input there is problem on input');
+                return redirect()->back();
+            }
+        }else{
+            Session::flash('error', 'There is a problem on Request');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -86,5 +101,31 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function validateRequest(){
+        return tap(request()->validate([
+            'customer_id' => 'required|numeric',
+            'start' => 'required|date',
+            'end' => 'required|date',
+            'days' => 'required|numeric',
+            'cost' => 'required|numeric',
+        ]), function(){
+           if(request()->hasFile('file')){
+               request()->validate([
+                   'file' => 'file'
+               ]);
+           }
+        });
+    }
+
+
+    private function storeFile($order)
+    {
+        if (request()->hasFile('file')) {
+            $order->update([
+                'file' => request()->file->store('orders', 'public'),
+            ]);
+        }
     }
 }

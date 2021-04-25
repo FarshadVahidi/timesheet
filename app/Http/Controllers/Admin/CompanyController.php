@@ -152,7 +152,6 @@ class CompanyController extends Controller
 
     private function storeFile($company)
     {
-
         if (request()->hasFile('file')) {
             $company->update([
                 'file' => request()->file->store('contract', 'public'),

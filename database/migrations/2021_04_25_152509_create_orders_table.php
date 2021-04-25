@@ -21,7 +21,7 @@ class CreateOrdersTable extends Migration
             $table->timestamp('end');
             $table->integer('days');
             $table->integer('cost');
-            $table->string('orderFile')->nullable();
+            $table->string('file')->nullable();
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('companies')->onUpdate('cascade')->onDelete('restrict');
