@@ -9,9 +9,27 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 @section('mainContent')
 
-<div>
-    <button class="btn btn-primary m-2" href="{{route('admins.Company.create')}}">{{__('Create Company')}}</button>
-</div>
+                    @if(Session::has('message'))
+                        <script>
+                            swal("OK!", "{!! Session::get('message') !!}", "success",{
+                                button:"OK",
+                            })
+                        </script>
+                    @endif
+
+                    @if(Session::has('error'))
+                        <script>
+                            swal("OOPS!", "{!! Session::get('message') !!}", "error",{
+                                button:"OK",
+                            })
+                        </script>
+                    @endif
+
+                    <div>
+                        <button class="btn btn-primary m-2"
+                                href="{{route('admins.Company.create')}}">{{__('Create Company')}}</button>
+                    </div>
+
                     <div class="cal-md-1">
                         <table class="table table-bordered data-table" id="datatable">
                             <thead>
@@ -30,7 +48,7 @@
                                         <div class="btn-group">
                                             <div>
                                                 <p><a class="btn btn-primary"
-                                                      href="#">{{ __('Detail') }}</a>
+                                                      href="{{route('admins.Company.show', $company->id)}}">{{ __('Detail') }}</a>
                                                 </p>
                                             </div>
                                         </div>

@@ -64,7 +64,19 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        //
+        if(!empty($id)){
+            try{
+                $company = Company::findOrFail($id);
+                return View::make('Admin.company.show', compact('company'));
+            }catch(Exception $e){
+                Session::flash('error', 'company Id is not valid');
+                return redirect()->back();
+            }
+
+        }else{
+            Session::flash('error', 'Company Id was undefined');
+            return redirect()->back();
+        }
     }
 
     /**
