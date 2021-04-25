@@ -14,7 +14,7 @@ class AddColumnCompanyToUser extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->foreignId('company_id')->nullable()->after('password')->constrained('companies');
         });
     }
 
@@ -26,7 +26,7 @@ class AddColumnCompanyToUser extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('company_id');
         });
     }
 }
