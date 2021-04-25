@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class CompanyController extends Controller
 {
@@ -20,11 +21,11 @@ class CompanyController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
-        //
+        return View::make('Admin.company.create');
     }
 
     /**
@@ -35,7 +36,7 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd('store work');
     }
 
     /**
