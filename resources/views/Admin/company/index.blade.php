@@ -26,8 +26,7 @@
                     @endif
 
                     <div>
-                        <button class="btn btn-primary m-2"
-                                href="{{route('admins.Company.create')}}">{{__('Create Company')}}</button>
+                        <a href="{{route('admins.Company.create')}}" class="btn btn-primary my-3">{{__('Create Company')}}</a>
                     </div>
 
                     <div class="cal-md-1">

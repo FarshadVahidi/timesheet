@@ -19,13 +19,14 @@
 
                     @if(Session::has('error'))
                         <script>
-                            swal("OOPS!", "{!! Session::get('message') !!}", "error",{
+                            swal("OOPS!", "{!! Session::get('error') !!}", "error",{
                                 button:"OK",
                             })
                         </script>
                     @endif
 
-                    <form class="row g-3" name="myForm" id="myForm" action="{{ route('admins.Company.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <form class="row g-3" name="myForm" id="myForm" action="{{ route('admins.Company.update', $company->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                        @method('PATCH')
                         <div class="col-md-6">
                             <label for="name" class="form-label">{{__('Company Name')}}</label>
                             <input type="text" class="form-control" name="name" id="name"  value="{{ old('name')?? $company->name}}">
