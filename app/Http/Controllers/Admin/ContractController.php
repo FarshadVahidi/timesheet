@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Services\Admin\ContractService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -52,8 +53,7 @@ class ContractController extends Controller
     {
         if(!empty($id)){
             try{
-                $path = Company::select('file')->where('id', '=', $id)->get();
-                $path = str_replace('contract','public/contract', $path->pluck('file')[0]);
+                $path = ContractService::show($id);
                 return Storage::response($path);
             }catch(Exception $e){
                 Session::flash('error', 'There was problem on extract data from database');

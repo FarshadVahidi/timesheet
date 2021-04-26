@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Order;
+use App\Services\Admin\OrderService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,16 +23,7 @@ class OrderController extends Controller
     public function index(): \Illuminate\Contracts\View\View
     {
         try{
-            $orders = Order::join('companies', 'companies.id' , '=', 'orders.customer_id')
-                ->select([
-                    'orders.start',
-                    'orders.end',
-                    'orders.id',
-                    'companies.name',
-                    'orders.cost',
-                    'orders.customer_id'])
-                ->get();
-
+            $orders = OrderService::index();
             return View::make('Admin.order.index', compact('orders'));
         }catch(Exception $e){
             Session::flash('error', 'There was a problem on database');
@@ -47,7 +39,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $companies = Company::where('id', '<>', 1)->get();
+        $companies = OrderService::create();
         return View::make('Admin.order.create', compact('companies'));
     }
 
@@ -61,8 +53,7 @@ class OrderController extends Controller
     {
         if(!empty($request)){
             if(!empty($this->validateRequest())){
-                $request->request->add(['company_id' => 1]);
-                $order = Order::create($request->all());
+                $order = OrderService::store($request);
                 $this->storeFile($order);
                 Session::flash('message', 'Order successfully saved!');
                 return redirect()->back();
@@ -80,17 +71,13 @@ class OrderController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
         if(!empty($id)){
             try{
-                $order = Order::join('companies', 'companies.id', '=', 'orders.customer_id')
-                    ->select('orders.id as order_id', 'customer_id', 'start', 'end', 'days', 'cost', 'companies.name as name')
-                    ->where('orders.id', '=', $id)
-                    ->get();
-
+                $order = OrderService::show($id);
                 return View::make('Admin.order.show', compact('order'));
             }catch(\Exception $e){
                 Session::flash('error', 'There is problem on database');
@@ -112,8 +99,7 @@ class OrderController extends Controller
     {
         if(!empty($id)){
             try{
-                $path = Order::select('file')->where('id', '=', $id)->get();
-                $path = str_replace('orders','public/orders', $path->pluck('file')[0]);
+                $path = OrderService::edit($id);
                 return Storage::response($path);
             }catch(Exception $e){
                 Session::flash('error', 'There was problem on extract data from database');
@@ -131,14 +117,13 @@ class OrderController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
         if(!empty($id) && !empty($request)){
             if(!empty($this->validateRequest())){
-                $order = Order::findOrfail($id);
-                $order->update($request->all());
+                $order = OrderService::update($request, $id);
                 $this->storeFile($order);
                 Session::flash('message', 'Order update successfully');
                 return redirect()->back();

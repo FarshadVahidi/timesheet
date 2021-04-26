@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Services\Admin\CompanyService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,11 +16,11 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {
-        $companies = Company::where('id', '<>', 1)->get();
+        $companies = CompanyService::index();
         return View::make('Admin.company.index', compact('companies'));
     }
 
@@ -43,8 +44,7 @@ class CompanyController extends Controller
     {
         if (!empty($this->validateRequest())) {
             try {
-                $request->request->add(['company_id' => 1]);
-                $company = Company::create($request->all());
+                $company = CompanyService::store($request);
                 $this->storeFile($company);
                 Session::flash('message', 'Company saved in database successfully!');
                 return redirect()->back();
@@ -67,7 +67,7 @@ class CompanyController extends Controller
     {
         if (!empty($id)) {
             try {
-                $company = Company::findOrFail($id);
+                $company = CompanyService::show($id);
                 return View::make('Admin.company.show', compact('company'));
             } catch (Exception $e) {
                 Session::flash('error', 'company Id is not valid');
@@ -104,9 +104,7 @@ class CompanyController extends Controller
             if (!empty($this->validateRequest())) {
 
                 try {
-
-                    $company = Company::findOrFail($id);
-                    $company->update(['name'=> $request->name, 'p_iva' => $request->p_iva]);
+                    $company = CompanyService::update($request, $id);
                     $this->storeFile($company);
                     Session::flash('message', 'Company saved in database successfully!');
                     return redirect()->back();
