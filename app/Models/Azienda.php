@@ -12,4 +12,9 @@ class Azienda extends Model
     protected $guarded = [];
 
     protected $table = "aziende";
+
+    public function orders()
+    {
+        $this->hasMany(Order::class);
+    }
 }

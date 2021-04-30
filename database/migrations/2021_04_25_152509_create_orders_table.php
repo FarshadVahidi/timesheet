@@ -24,7 +24,7 @@ class CreateOrdersTable extends Migration
             $table->string('file')->nullable();
             $table->timestamps();
 
-            $table->foreign('customer_id')->references('id')->on('companies')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('customer_id')->references('id')->on('aziende')->onUpdate('cascade')->onDelete('restrict');
         });
     }
 
