@@ -10,6 +10,7 @@ use App\Services\Activity\ActivityService;
 use App\Services\User\EventService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use phpDocumentor\Reflection\Types\Compound;
@@ -47,14 +48,20 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
-        if($entry === null){
+        //select sum(hour) from events where user_id = 3 and start='2021-04-30'
+        $hour = Event::select([
+            DB::raw("SUM(hour) as hour")
+        ])->where('user_id', '=', auth()->user()->id)->where('start' , '=', $request->start)->groupBy('start')->get()->pluck('hour');
+
+        if( empty($hour[0]) || $hour[0] < 8.0 ){
 //            (new EventProvider($request))->store($request);
 //            return redirect()->back();
             EventService::store($request);
+            Session::flash('message', 'you hour added successfully!');
             return redirect()->back();
         }else{
             //sweet alert not working
+            Session::flash('error', 'you can not enter more than 8 hour work');
             return redirect()->back();
         }
     }
