@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Models\Event;
+use App\Models\Order;
 use Carbon\Carbon;
 
 class EventService{
@@ -19,26 +20,33 @@ class EventService{
 
         $event->start = $request->start;
         $event->allDay = $request->allDay;
-        $event->title = $request->title;
         $event->hour = $request->hour;
         if ($request->has('ferie')) {
             $event->ferie = true;
             $event->order_id = null;
+            $event->title = 'FERIE';
         } else {
             $event->ferie = false;
             $event->order_id = $request->selectId;
+            $event->title = self::makeTitle($request);
     }
         $event->save();
     }
 
     public static function update($request, $event)
     {
-        $event->title = $request->uptitle;
+
         $event->hour = $request->UpHour;
-        if(! $request->has('UpFerie'))
+        if(! $request->has('UpFerie')){
             $event->ferie = false;
-        else
+            $event->title = self::makeTitle($request);
+        }
+        else{
             $event->ferie = true;
+            $event->order_id = NULL;
+            $event->title = 'FERIE';
+        }
+
         $event->update();
     }
 
@@ -77,5 +85,18 @@ class EventService{
                 $dt->addDay();
             }
         }
+    }
+
+    /**
+     * @param $request
+     * @return string
+     */
+    private static function makeTitle($request): string
+    {
+        $s = (explode('-', $request->title));
+
+        $p = Order::where('id', $s[0])->pluck('name');
+
+        return $p[0] . " / " . $s[1];
     }
 }

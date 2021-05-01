@@ -26,19 +26,32 @@
 
             function validateForm() {
                 let temp = document.getElementById('ferie').checked;
-                if (temp) {
+                if(temp){
                     document.dayClick.hour.value = 0;
                     document.dayClick.title.value = "FERIE";
                     return true;
-                } else if (document.dayClick.hour.value > 8.0) {
-                    alert('Hour must be less than 8 hours!');
+                }
+
+
+                let pro = document.dayClick.selectId.value;
+                if(pro.toString() === "notSelect"){
+                    alert('you must select project to enter');
                     return false;
-                } else if (document.dayClick.hour.value < 0.0) {
-                    alert('Hour can not be less than zero!')
-                    return false;
-                } else {
-                    document.getElementById('ferie').value = false;
-                    return true;
+                }else {
+                    let hor = document.dayClick.hour.value;
+                        if(hor.trim() === ''){
+                            alert('please enter hour')
+                            return false;
+                        }else if(document.dayClick.hour.value > 8.0 || document.dayClick.hour.value <= 0.0){
+                            alert('Hour must be less than 8.0 and more than 0.0');
+                            return false;
+                        }else{
+                            let tit = document.dayClick.title.value;
+                            let t = pro.toString()+"-"+tit.toString();
+                            document.dayClick.title.value = t;
+                            return true;
+                        }
+
                 }
             }
 
@@ -113,6 +126,7 @@
                         $('#eventId').val(info.event.id);
                         $('#uptitle').val(info.event.title);
                         $('#UpStart').val(convert(info.event.start));
+                        // $('#UpselectId').val(info.event.extendedProps.);
                         $('#UpHour').val(info.event.extendedProps.hour);
                         $('#update').html('Update');
 
@@ -203,7 +217,7 @@
                                     <div class="mb-3">
                                         <label class="mb-3">{{__('project')}}</label>
                                         <select class="mb-3" aria-label="Default select example" name="selectId" id="selectId">
-                                            <option selected disabled>{{__('select project')}}</option>
+                                            <option value="notSelect" selected disabled>{{__('select project')}}</option>
                                             @foreach($project as $p)
                                                 <option value="{{$p->order_id}}">{{$p->name}}</option>
                                             @endforeach
@@ -251,6 +265,24 @@
                             <div class="input">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="mb-3">{{__('project')}}</label>
+                                    <select class="mb-3" aria-label="Default select example" name="UpselectId" id="UpselectId">
+                                        <option selected disabled>{{__('select project')}}</option>
+                                        @foreach($project as $p)
+                                            <option value="{{$p->order_id}}">{{$p->name}}</option>
+                                        @endforeach
+                                        <button onclick="addOption()">{{__('Add project')}}</button>
+                                        <script type="text/javascript">
+                                            function addOption(){
+                                                optionText='New element';
+                                                optionValue='newElement';
+                                                $('#selectId').append('<option value="${optionValue}">${optionText}</option>');
+                                            }
+                                        </script>
+                                    </select>
                                 </div>
 
 
