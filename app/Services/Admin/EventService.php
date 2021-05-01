@@ -12,7 +12,7 @@ class EventService{
     {
         return DB::table('users')
             ->join('events', 'user_id', '=', 'users.id')
-            ->select('events.id','user_id', 'start', 'end', 'allDay', 'hour', 'title', 'name')->get();
+            ->select('events.id','user_id', 'start', 'allDay', 'hour', 'title', 'name')->get();
     }
 
     public static function store($request)
@@ -20,7 +20,6 @@ class EventService{
         $event = new Event();
         $event->user_id = $request->user()->id;
         $event->start = $request->start;
-        $event->end = $request->end;
         $event->allDay = $request->allDay;
         $event->title = $request->title;
         $event->hour = $request->hour;

@@ -1,23 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Providers\User\EventProvider;
-use App\Services\User\EventService;
+use App\Models\Azienda;
+use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
-class AutoFillController extends Controller
+class ProfileOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {
-        //
+//        $order_user = User::join('workon', 'user_id', '=', 'users.id')
+//            ->get();
+//        dd($order_user);
+
+        $aziende = Azienda::where('id', '<>', 1)->get();
+
+        return View::make('Admin.profile.index' , compact('aziende'));
     }
 
     /**
@@ -38,18 +46,23 @@ class AutoFillController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $orders = Order::where('customer_id', '=', request()->azienda)->get(['id', 'start', 'days', 'cost']);
+        return View::make('Admin.profile.show', compact('orders'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
-        //
+        $workon = DB::table('users')->join('workon', 'user_id', '=', 'id')
+            ->join('events', 'workon.user_id' , '=', 'events.user_id')
+            ->where('workon.order_id' , '=', $id)
+            ->get();
+        dd($workon);
+        return View::make('Admin.profile.worker', compact('workon'));
     }
 
     /**
@@ -68,14 +81,11 @@ class AutoFillController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-
-//        (new EventProvider($request))->AutoFill($request, $id);
-        EventService::AutoFill($request, $id);
-        return redirect(route('dashboard'));
+        //
     }
 
     /**

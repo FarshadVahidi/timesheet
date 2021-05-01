@@ -16,15 +16,18 @@ class EventService{
     {
         $event = new Event();
         $event->user_id = $request->user()->id;
+
         $event->start = $request->start;
-        $event->end = $request->end;
         $event->allDay = $request->allDay;
         $event->title = $request->title;
         $event->hour = $request->hour;
-        if($request->has('ferie'))
+        if ($request->has('ferie')) {
             $event->ferie = true;
-        else
+            $event->order_id = null;
+        } else {
             $event->ferie = false;
+            $event->order_id = $request->selectId;
+    }
         $event->save();
     }
 
@@ -60,7 +63,7 @@ class EventService{
 
                     $event = new Event();
                     $event->start = $dt->toDate();
-                    $event->end = $dt->addDay()->toDate();
+                    $event->order_id = null;
                     $event->hour = 8;
                     $event->title = 'Auto Fill';
                     $event->user_id = $id;

@@ -132,6 +132,14 @@
         });
     </script>
 
+        <script type="text/javascript">
+            function addOption(){
+                optionText = 'Premium';
+                optionValue = 'Premium';
+                $('#project').append(<option value="${optionValue}"> ${optionText} </option>);
+            }
+        </script>
+
     @endsection
 
 
@@ -163,7 +171,6 @@
                               onsubmit="return validateForm()">
                             @csrf
 
-
                             <div class="form-check m-3">
                                 <input class="form-check-input" name="ferie" type="checkbox" value="1" id="ferie">
                                 <label class="form-check-label">{{ __('Ferie') }}</label>
@@ -179,9 +186,23 @@
                                     <input type="text" class="form-control" id="start" name="start" readonly>
                                 </div>
 
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="end" name="end" readonly>
-                                </div>
+{{--                                <div class="mb-3">--}}
+{{--                                    <label class="form-label">{{__('project')}}</label>--}}
+{{--                                    <select class="form-select" aria-label="Default select example" name="selectId" id="selectId">--}}
+{{--                                        <option selected>{{__('select project')}}</option>--}}
+{{--                                        @foreach($project as $p)--}}
+{{--                                            <option value="$p->order_id">{{$p->order_id}}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                        <button onclick="addOption()">{{__('Add project')}}</button>--}}
+{{--                                        <script type="text/javascript">--}}
+{{--                                            function addOption(){--}}
+{{--                                                optionText='New element';--}}
+{{--                                                optionValue='newElement';--}}
+{{--                                                $('#selectId').append('<option value="${optionValue}">${optionText}</option>');--}}
+{{--                                            }--}}
+{{--                                        </script>--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
 
 
                                 <div class="input-group flex-nowrap mb-3">

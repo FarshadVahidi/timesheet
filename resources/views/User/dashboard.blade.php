@@ -183,7 +183,21 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" id="end" name="end" hidden>
+                                        <label class="mb-3">{{__('project')}}</label>
+                                        <select class="mb-3" aria-label="Default select example" name="selectId" id="selectId">
+                                            <option selected disabled>{{__('select project')}}</option>
+                                            @foreach($project as $p)
+                                                <option value="{{$p->order_id}}">{{$p->name}}</option>
+                                            @endforeach
+                                            <button onclick="addOption()">{{__('Add project')}}</button>
+                                            <script type="text/javascript">
+                                                function addOption(){
+                                                    optionText='New element';
+                                                    optionValue='newElement';
+                                                    $('#selectId').append('<option value="${optionValue}">${optionText}</option>');
+                                                }
+                                            </script>
+                                        </select>
                                     </div>
 
 

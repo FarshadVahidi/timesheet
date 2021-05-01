@@ -15,16 +15,15 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained()->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreignId('order_id')->nullable()->constrained()->restrictOnDelete()->cascadeOnUpdate();
             $table->string('title', 100)->nullable();
             $table->date('start');
-            $table->date('end');
             $table->integer('allDay');
             $table->float('hour');
             $table->boolean('ferie')->default(false);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('restrict');
         });
     }
 

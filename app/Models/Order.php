@@ -15,4 +15,9 @@ class Order extends Model
     {
         $this->belongsTo(Azienda::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

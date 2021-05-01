@@ -40,6 +40,13 @@
                             {{ $errors->first('customer') }}
                         </div>
 
+
+
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">{{__('Name')}}</label>
+                            <input type="text" class="form-control" name="name" id="name"  value="{{ old('name')}}">
+                        </div>
+
                         <div class="col-md-6">
                             <label for="start" class="form-label">{{__('Start')}}</label>
                             <input type="date" class="form-control" name="start" id="start"  value="{{ old('start')}}">
