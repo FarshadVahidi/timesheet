@@ -46,7 +46,8 @@ class ProfileOrderController extends Controller
      */
     public function store(Request $request)
     {
-        $orders = Order::where('customer_id', '=', request()->azienda)->get(['id', 'start', 'days', 'cost']);
+        $orders = Order::where('aziende_id', '=', request()->azienda)->get(['id','name', 'start', 'days', 'cost']);
+
         return View::make('Admin.profile.show', compact('orders'));
     }
 

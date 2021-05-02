@@ -33,7 +33,7 @@
                         <table class="table table-bordered data-table" id="datatable">
                             <thead>
                             <tr>
-                                <th scope="col">{{ __('order ID') }}</th>
+                                <th scope="col">{{ __('order') }}</th>
                                 <th scope="col">{{ __('start') }}</th>
                                 <th scope="col">{{ __('days') }}</th>
                                 <th scope="col">{{ __('cost') }}</th>
@@ -43,7 +43,7 @@
                             <tbody>
                             @foreach($orders as $order)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
+                                    <td>{{ $order->name }}</td>
                                     <td>{{ $order->start }}</td>
                                     <td>{{ $order->days }}</td>
                                     <td>{{ $order->cost }}</td>

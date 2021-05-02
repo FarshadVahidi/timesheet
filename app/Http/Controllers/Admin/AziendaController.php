@@ -17,7 +17,7 @@ class AziendaController extends Controller
      */
     public function index()
     {
-        $aziende = Azienda::all();
+        $aziende = Azienda::where('id', '<>', 1)->get();
         return View::make('Admin.azienda.index', compact('aziende'));
     }
 

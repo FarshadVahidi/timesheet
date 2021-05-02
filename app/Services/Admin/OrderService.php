@@ -11,14 +11,14 @@ class OrderService{
 
     public static function index()
     {
-        return Order::join('aziende', 'aziende.id' , '=', 'orders.customer_id')
-            ->select([
+        return Order::join('aziende', 'aziende.id' , '=', 'orders.aziende_id')
+            ->select(
                 'orders.start',
                 'orders.end',
                 'orders.id',
                 'aziende.name',
                 'orders.cost',
-                'orders.customer_id'])
+                'orders.aziende_id')
             ->get();
     }
 
@@ -35,8 +35,8 @@ class OrderService{
 
     public static function show($id)
     {
-        return Order::join('aziende', 'aziende.id', '=', 'orders.customer_id')
-            ->select('orders.id as order_id', 'customer_id', 'start', 'end', 'days', 'cost', 'aziende.name as name')
+        return Order::join('aziende', 'aziende.id', '=', 'orders.aziende_id')
+            ->select('orders.id as order_id', 'aziende_id', 'start', 'end', 'days', 'cost', 'aziende.name as name', 'orders.name as orderName')
             ->where('orders.id', '=', $id)
             ->get();
     }
