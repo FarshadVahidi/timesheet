@@ -11,19 +11,23 @@
 
                     @if(Session::has('message'))
                         <script>
-                            swal("OK!", "{!! Session::get('message') !!}", "success",{
-                                button:"OK",
+                            swal("OK!", "{!! Session::get('message') !!}", "success", {
+                                button: "OK",
                             })
                         </script>
                     @endif
 
                     @if(Session::has('error'))
                         <script>
-                            swal("OOPS!", "{!! Session::get('message') !!}", "error",{
-                                button:"OK",
+                            swal("OOPS!", "{!! Session::get('message') !!}", "error", {
+                                button: "OK",
                             })
                         </script>
                     @endif
+
+                    <div>
+                        <h3>{{$workon[0]->orderName}}</h3>
+                    </div>
 
                     <div class="cal-md-1">
                         <table class="table table-bordered data-table" id="datatable">
@@ -38,15 +42,14 @@
                             <tbody>
                             @foreach($workon as $w)
                                 <tr>
-                                    <td>{{ $w->id }}</td>
-                                    <td>{{ $w->start }}</td>
+                                    <td>{{ $w->name }}</td>
+                                    <td>{{ $w->hours }}</td>
                                     <td>{{ $w->days }}</td>
-                                    <td>{{ $w->cost }}</td>
                                     <td>
                                         <div class="btn-group">
                                             <div>
                                                 <p><a class="btn btn-primary"
-                                                      href="{{route('admins.ProfileOrder.show', $w->id)}}">{{ __('Detail') }}</a>
+                                                      href="{{route('admins.ProfileOrder.show', $w->user_id)}}">{{ __('Detail') }}</a>
                                                 </p>
                                             </div>
                                         </div>

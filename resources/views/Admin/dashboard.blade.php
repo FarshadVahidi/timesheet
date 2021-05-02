@@ -186,28 +186,29 @@
                                     <input type="text" class="form-control" id="start" name="start" readonly>
                                 </div>
 
-{{--                                <div class="mb-3">--}}
-{{--                                    <label class="form-label">{{__('project')}}</label>--}}
-{{--                                    <select class="form-select" aria-label="Default select example" name="selectId" id="selectId">--}}
-{{--                                        <option selected>{{__('select project')}}</option>--}}
-{{--                                        @foreach($project as $p)--}}
-{{--                                            <option value="$p->order_id">{{$p->order_id}}</option>--}}
-{{--                                        @endforeach--}}
-{{--                                        <button onclick="addOption()">{{__('Add project')}}</button>--}}
-{{--                                        <script type="text/javascript">--}}
-{{--                                            function addOption(){--}}
-{{--                                                optionText='New element';--}}
-{{--                                                optionValue='newElement';--}}
-{{--                                                $('#selectId').append('<option value="${optionValue}">${optionText}</option>');--}}
-{{--                                            }--}}
-{{--                                        </script>--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-
-
                                 <div class="input-group flex-nowrap mb-3">
                                     <span class="input-group-text" id="addon-wrapping">{{ __('Hours') }}</span>
                                     <input type="number" step="0.01" id="hour" name="hour" class="form-control" placeholder="number">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="mb-3">{{__('project')}}</label>
+                                    <select class="mb-3" aria-label="Default select example" name="selectId"
+                                            id="selectId">
+                                        <option value="notSelect" selected
+                                                disabled>{{__('select project')}}</option>
+                                        @foreach($project as $p)
+                                            <option value="{{$p->order_id}}">{{$p->name}}</option>
+                                        @endforeach
+                                        <button onclick="addOption()">{{__('Add project')}}</button>
+                                        <script type="text/javascript">
+                                            function addOption() {
+                                                optionText = 'New element';
+                                                optionValue = 'newElement';
+                                                $('#selectId').append('<option value="${optionValue}">${optionText}</option>');
+                                            }
+                                        </script>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">

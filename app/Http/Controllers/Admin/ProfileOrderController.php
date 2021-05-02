@@ -58,11 +58,15 @@ class ProfileOrderController extends Controller
      */
     public function show($id)
     {
-        $workon = DB::table('users')->join('workon', 'user_id', '=', 'id')
-            ->join('events', 'workon.user_id' , '=', 'events.user_id')
-            ->where('workon.order_id' , '=', $id)
+        $workon = DB::table('users')->join('events', 'users.id', '=', 'events.user_id')
+            ->join('orders', 'orders.id' , '=', 'events.order_id')
+            ->where('order_id' , '=', $id)
+            ->whereNotNull('order_id')
+            ->select('order_id', 'user_id', 'users.name as name', 'orders.name as orderName')
+            ->groupBy('order_id', 'user_id')
+            ->selectRaw('sum(hour) as hours')
+            ->selectRaw('count(events.start) as days')
             ->get();
-        dd($workon);
         return View::make('Admin.profile.worker', compact('workon'));
     }
 
