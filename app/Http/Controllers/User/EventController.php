@@ -54,7 +54,8 @@ class EventController extends Controller
             $hour = Event::select([
                 DB::raw("SUM(hour) as hour"),
             ])->where('user_id', '=', auth()->user()->id)->where('start' , '=', $request->start)->groupBy('start')->get()->pluck('hour');
-            if( empty($hour[0]) || $hour[0] < 8.0 ){
+//            dd($request->hour + $hour[0]);
+            if( empty($hour[0]) || $hour[0] + $request->hour <= 8.0 ){
                 EventService::store($request);
                 Session::flash('message', 'you hour added successfully!');
                 return redirect()->back();
@@ -116,13 +117,35 @@ class EventController extends Controller
      */
     public function update(Request $request)
     {
-        $event = Event::findOrFail($request->eventId);
-        if($event !== null)
+//        dd($request);
+        if($request->UpFerie)
         {
-//            (new EventProvider($request))->update($request, $event);
-            EventService::update($request, $event);
+            Event::where('user_id', auth()->user()->id)->where('start', '=', $request->UpStart)->delete();
+            $event = new Event();
+            $event->user_id = $request->user()->id;
+            $event->ferie = true;
+            $event->order_id = null;
+            $event->title = $request->UpTitle;
+            $event->start = $request->UpStart;
+            $event->allDay = 1;
+            $event->hour = $request->UpHour;
+            $event->save();
             return redirect(route('dashboard'));
+        }else{
+            $event = Event::findOrFail($request->eventId);
+            if($event !== null)
+            {
+                if($request->UpHour < 8.0){
+                    EventService::update($request, $event);
+                    return redirect(route('dashboard'));
+                }else{
+                    Session::flash('error', 'you can not enter more than 8 hour work');
+                    return redirect(route('dashboard'));
+                }
+
+            }
         }
+
     }
 
     /**
