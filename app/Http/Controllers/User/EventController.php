@@ -49,25 +49,34 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $temp = Event::select('ferie')->where('user_id', '=', auth()->user()->id)->where('start', '=', $request->start)->get()->pluck('ferie');
-        if(empty($temp) || empty($temp[0])){
-            //select sum(hour) from events where user_id = 3 and start='2021-04-30'
-            $hour = Event::select([
-                DB::raw("SUM(hour) as hour"),
-            ])->where('user_id', '=', auth()->user()->id)->where('start' , '=', $request->start)->groupBy('start')->get()->pluck('hour');
+
+        $ex = Event::where('user_id', '=', auth()->user()->id)->where('start', '=', $request->start)->where('order_id' , '=', $request->selectId)->get();
+
+        if(empty($ex[0])){
+            if(empty($temp) || empty($temp[0])){
+                //select sum(hour) from events where user_id = 3 and start='2021-04-30'
+                $hour = Event::select([
+                    DB::raw("SUM(hour) as hour"),
+                ])->where('user_id', '=', auth()->user()->id)->where('start' , '=', $request->start)->groupBy('start')->get()->pluck('hour');
 //            dd($request->hour + $hour[0]);
-            if( empty($hour[0]) || $hour[0] + $request->hour <= 8.0 ){
-                EventService::store($request);
-                Session::flash('message', 'you hour added successfully!');
-                return redirect()->back();
+                if( empty($hour[0]) || $hour[0] + $request->hour <= 8.0 ){
+                    EventService::store($request);
+                    Session::flash('message', 'you hour added successfully!');
+                    return redirect()->back();
+                }else{
+                    //sweet alert not working
+                    Session::flash('error', 'you can not enter more than 8 hour work');
+                    return redirect()->back();
+                }
             }else{
-                //sweet alert not working
-                Session::flash('error', 'you can not enter more than 8 hour work');
+                Session::flash('error' , 'YOU CAN NOT ENTER FOR FERIE DAY WORKING HOUR please use update option');
                 return redirect()->back();
             }
         }else{
-            Session::flash('error' , 'YOU CAN NOT ENTER FOR FERIE DAY WORKING HOUR please use update option');
+            Session::flash('error', 'YOU HAVE ENTRY FOR THIS PROJECT PRLEASE USE UPDATE');
             return redirect()->back();
         }
+
 
     }
 
@@ -130,6 +139,7 @@ class EventController extends Controller
             $event->allDay = 1;
             $event->hour = $request->UpHour;
             $event->save();
+            Session::flash('message', 'update successfully');
             return redirect(route('dashboard'));
         }else{
             $event = Event::findOrFail($request->eventId);
@@ -137,6 +147,7 @@ class EventController extends Controller
             {
                 if($request->UpHour < 8.0){
                     EventService::update($request, $event);
+                    Session::flash('message', 'update successfully');
                     return redirect(route('dashboard'));
                 }else{
                     Session::flash('error', 'you can not enter more than 8 hour work');

@@ -28,31 +28,34 @@
 
             function validateForm() {
                 let temp = document.getElementById('ferie').checked;
+                let pro = document.dayClick.selectId.value;
+                let hour = document.dayClick.hour.value;
+                let tit = document.dayClick.title.value.toString();
+
                 if (temp) {
                     document.dayClick.hour.value = 0;
                     document.dayClick.title.value = "FERIE";
                     return true;
-                }
-
-
-                let pro = document.dayClick.selectId.value;
-                if (pro.toString() === "notSelect") {
-                    alert('you must select project to enter');
-                    return false;
-                } else {
-                    let hor = document.dayClick.hour.value;
-                    if (hor.trim() === '') {
+                }else {
+                    if (pro.toString() === "notSelect") {
+                        alert('you must select project to enter');
+                        return false;
+                    }
+                    if (hour.trim() === '') {
                         alert('please enter hour')
                         return false;
-                    } else if (document.dayClick.hour.value > 8.0 || document.dayClick.hour.value <= 0.0) {
+                    }
+                    if (hour > 8.0 || hour <= 0.0) {
                         alert('Hour must be less than 8.0 and more than 0.0');
                         return false;
-                    } else {
-                        let tit = document.dayClick.title.value;
-                        document.dayClick.title.value = pro.toString() + "-" + tit.toString();
-                        return true;
                     }
-
+                    if ( tit === '') {
+                        // let tit = document.dayClick.title.value;
+                        // document.dayClick.title.value = pro.toString() + "-" + tit.toString();
+                        alert('please insert description');
+                        return false;
+                    }
+                    return true;
                 }
             }
 

@@ -94,12 +94,10 @@ class EventService{
      */
     private static function makeTitle($request): string
     {
-
-        $s = (explode('-', $request->title));
-
-        $p = Order::where('id', $s[0])->pluck('name');
-
-        return $p[0] . " / " . $s[1];
+//        dd($request);
+        $p = Order::where('id','=', $request->selectId)->pluck('name');
+//dd($p);
+        return $p[0] . " / " . $request->title;
     }
 
     private static function makeUpTitle($request): string
