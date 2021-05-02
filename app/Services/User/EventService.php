@@ -39,7 +39,8 @@ class EventService{
         $event->hour = $request->UpHour;
         if(! $request->has('UpFerie')){
             $event->ferie = false;
-            $event->title = self::makeTitle($request);
+            $event->title = self::makeUpTitle($request);
+            $event->order_id = $request->UpselectId;
         }
         else{
             $event->ferie = true;
@@ -93,10 +94,22 @@ class EventService{
      */
     private static function makeTitle($request): string
     {
+
         $s = (explode('-', $request->title));
 
         $p = Order::where('id', $s[0])->pluck('name');
 
         return $p[0] . " / " . $s[1];
+    }
+
+    private static function makeUpTitle($request): string
+    {
+//        dd($request->UpTitle);
+//        $s = (explode('-', $request->UpTitle));
+//        dd($s);
+
+        $p = Order::where('id','=', $request->UpselectId)->pluck('name');
+
+        return $p[0] . " / " . $request->UpTitle;
     }
 }

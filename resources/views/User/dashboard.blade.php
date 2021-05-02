@@ -1,15 +1,17 @@
 <x-app-layout>
 
     @section('myScript')
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+                integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+                crossorigin="anonymous"></script>
         <script>
 
-            $(document).ready(function(){
-                $('#ferie').click(function(){
+            $(document).ready(function () {
+                $('#ferie').click(function () {
                     $('.input').slideToggle();
                 });
 
-                $('#UpFerie').click(function(){
+                $('#UpFerie').click(function () {
                     $('.input').slideToggle();
                 });
             });
@@ -21,12 +23,12 @@
                 let year = '' + d.getFullYear();
                 if (month.length < 2) month = '0' + month;
                 if (day.length < 2) day = '0' + day;
-                return [year, month, day].join('-') ;
+                return [year, month, day].join('-');
             }
 
             function validateForm() {
                 let temp = document.getElementById('ferie').checked;
-                if(temp){
+                if (temp) {
                     document.dayClick.hour.value = 0;
                     document.dayClick.title.value = "FERIE";
                     return true;
@@ -34,47 +36,57 @@
 
 
                 let pro = document.dayClick.selectId.value;
-                if(pro.toString() === "notSelect"){
+                if (pro.toString() === "notSelect") {
                     alert('you must select project to enter');
                     return false;
-                }else {
+                } else {
                     let hor = document.dayClick.hour.value;
-                        if(hor.trim() === ''){
-                            alert('please enter hour')
-                            return false;
-                        }else if(document.dayClick.hour.value > 8.0 || document.dayClick.hour.value <= 0.0){
-                            alert('Hour must be less than 8.0 and more than 0.0');
-                            return false;
-                        }else{
-                            let tit = document.dayClick.title.value;
-                            let t = pro.toString()+"-"+tit.toString();
-                            document.dayClick.title.value = t;
-                            return true;
-                        }
+                    if (hor.trim() === '') {
+                        alert('please enter hour')
+                        return false;
+                    } else if (document.dayClick.hour.value > 8.0 || document.dayClick.hour.value <= 0.0) {
+                        alert('Hour must be less than 8.0 and more than 0.0');
+                        return false;
+                    } else {
+                        let tit = document.dayClick.title.value;
+                        document.dayClick.title.value = pro.toString() + "-" + tit.toString();
+                        return true;
+                    }
 
                 }
             }
 
             function validateFormUpdate() {
+                let pro = document.UpClick.UpselectId.value;
                 let temp = document.getElementById('UpFerie').checked;
+                let hor = document.UpClick.UpHour.value;
 
                 if (temp) {
                     document.UpClick.UpHour.value = 0;
-                    document.UpClick.uptitle.value = "FERIE";
+                    document.UpClick.UpTitle.value = "FERIE";
                     return true;
-                } else if (document.UpClick.UpHour.value > 8.0) {
-                    alert('Hour must be less than 8 hours!');
-                    return false;
-                } else if (document.UpClick.UpHour.value < 0.0) {
-                    alert('Hour can not be less than zero!')
-                    return false;
-                } else {
-                    document.getElementById('UpFerie').value = false;
+                }else {
+                    if (pro.toString() === "notSelect") {
+                        alert('please select project');
+                        return false;
+                    }
+                    if (hor.trim() === '' || hor.toString() === "0") {
+                        alert('hour can not be black or zero');
+                        return false;
+                    }
+                    if (document.UpClick.UpHour.value > 8.0 && document.dayClick.UpHour.value <= 0.0) {
+                        alert('hour must be less than 8 houre and more than zero')
+                        return false;
+                    }
+                    if (document.UpClick.UpTitle.value.toString() === '') {
+                        alert('please insert description for you update');
+                        return false;
+                    }
                     return true;
                 }
             }
 
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 var calendarEl = document.getElementById('calendar');
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
@@ -123,10 +135,11 @@
                         })
                     },
                     eventClick: function (info) {
+                        let a = info.event.title.split([" / "]);
                         $('#eventId').val(info.event.id);
-                        $('#uptitle').val(info.event.title);
+                        $('#UpTitle').val(a[1]);
                         $('#UpStart').val(convert(info.event.start));
-                        // $('#UpselectId').val(info.event.extendedProps.);
+                        $('#Upselect').val(a[0]);
                         $('#UpHour').val(info.event.extendedProps.hour);
                         $('#update').html('Update');
 
@@ -160,16 +173,16 @@
 
                     @if(Session::has('message'))
                         <script>
-                            swal("OK!", "{!! Session::get('message') !!}", "success",{
-                                button:"OK",
+                            swal("OK!", "{!! Session::get('message') !!}", "success", {
+                                button: "OK",
                             })
                         </script>
                     @endif
 
                     @if(Session::has('error'))
                         <script>
-                            swal("OOPS!", "{!! Session::get('error') !!}", "error",{
-                                button:"OK",
+                            swal("OOPS!", "{!! Session::get('error') !!}", "error", {
+                                button: "OK",
                             })
                         </script>
                     @endif
@@ -177,7 +190,8 @@
                     <div id="calendar"></div>
 
                     <div id="fill">
-                        <form id="fill-form" name="fill-form" method="POST" action="{{route('users.autofill.update', auth()->user()->id)}}">
+                        <form id="fill-form" name="fill-form" method="POST"
+                              action="{{route('users.autofill.update', auth()->user()->id)}}">
                             @csrf
                             @method('PATCH')
                             <div class="input">
@@ -200,12 +214,14 @@
 
 
                                 <div class="form-check m-3">
-                                    <input class="form-check-input" name="ferie" type="checkbox" value={{true}} id="ferie">
+                                    <input class="form-check-input" name="ferie" type="checkbox"
+                                           value={{true}} id="ferie">
                                     <label class="form-check-label">{{ __('Ferie') }}</label>
                                 </div>
 
                                 <div class="form-check m-3" hidden>
-                                    <input class="form-check-input" name="allDay" type="checkbox" value="1" id="allDay"  checked>
+                                    <input class="form-check-input" name="allDay" type="checkbox" value="1" id="allDay"
+                                           checked>
                                     <label class="form-check-label">{{__('allDay')}}</label>
                                 </div>
 
@@ -216,16 +232,18 @@
 
                                     <div class="mb-3">
                                         <label class="mb-3">{{__('project')}}</label>
-                                        <select class="mb-3" aria-label="Default select example" name="selectId" id="selectId">
-                                            <option value="notSelect" selected disabled>{{__('select project')}}</option>
+                                        <select class="mb-3" aria-label="Default select example" name="selectId"
+                                                id="selectId">
+                                            <option value="notSelect" selected
+                                                    disabled>{{__('select project')}}</option>
                                             @foreach($project as $p)
                                                 <option value="{{$p->order_id}}">{{$p->name}}</option>
                                             @endforeach
                                             <button onclick="addOption()">{{__('Add project')}}</button>
                                             <script type="text/javascript">
-                                                function addOption(){
-                                                    optionText='New element';
-                                                    optionValue='newElement';
+                                                function addOption() {
+                                                    optionText = 'New element';
+                                                    optionValue = 'newElement';
                                                     $('#selectId').append('<option value="${optionValue}">${optionText}</option>');
                                                 }
                                             </script>
@@ -235,14 +253,15 @@
 
                                     <div class="input-group flex-nowrap mb-3">
                                         <span class="input-group-text" id="addon-wrapping">{{ __('Hours') }}</span>
-                                        <input type="number" step="0.01" id="hour" name="hour" class="form-control" placeholder="number">
+                                        <input type="number" step="0.01" id="hour" name="hour" class="form-control"
+                                               placeholder="number">
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('Description')}}</label>
-                                        <input type="text" class="form-control" id="title" name="title"
-                                               aria-describedby="description">
+                                        <label class="form-label">Description</label>
+                                        <textarea type="text" class="form-control" id="title" name="title" rows="3"></textarea>
                                     </div>
+
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">{{__('Submit')}}</button>
@@ -251,14 +270,16 @@
                     </div>
 
                     <div id="farshad">
-                        <form id="UpClick" name="UpClick" method="POST" action="{{ route('users.event.update', 'eventId') }}"
-                              onsubmit="return validateFormUpdate()">
+                        <form id="UpClick" name="UpClick" method="POST"
+                              action="{{ route('users.event.update', 'eventId') }}"
+                              onsubmit="return validateFormUpdate();">
                             @method('PATCH')
                             @csrf
                             <input type="hidden" id="eventId" name="eventId">
 
                             <div class="form-check m-3">
-                                <input class="form-check-input" name="UpFerie" type="checkbox" value={{true}} id="UpFerie">
+                                <input class="form-check-input" name="UpFerie" type="checkbox"
+                                       value={{true}} id="UpFerie">
                                 <label class="form-check-label">Ferie</label>
                             </div>
 
@@ -268,17 +289,22 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <input type="text" class="form-control" id="Upselect" name="Upselect" readonly>
+                                </div>
+
+                                <div class="mb-3">
                                     <label class="mb-3">{{__('project')}}</label>
-                                    <select class="mb-3" aria-label="Default select example" name="UpselectId" id="UpselectId">
-                                        <option selected disabled>{{__('select project')}}</option>
+                                    <select class="mb-3" aria-label="Default select example" name="UpselectId"
+                                            id="UpselectId">
+                                        <option value="notSelect" selected disabled>{{__('select project')}}</option>
                                         @foreach($project as $p)
                                             <option value="{{$p->order_id}}">{{$p->name}}</option>
                                         @endforeach
                                         <button onclick="addOption()">{{__('Add project')}}</button>
                                         <script type="text/javascript">
-                                            function addOption(){
-                                                optionText='New element';
-                                                optionValue='newElement';
+                                            function addOption() {
+                                                optionText = 'New element';
+                                                optionValue = 'newElement';
                                                 $('#selectId').append('<option value="${optionValue}">${optionText}</option>');
                                             }
                                         </script>
@@ -288,16 +314,17 @@
 
                                 <div class="input-group flex-nowrap mb-3">
                                     <span class="input-group-text" id="addon-wrapping">Hours</span>
-                                    <input type="number" step="0.01" id="UpHour" name="UpHour" class="form-control" placeholder="number">
+                                    <input type="number" step="0.01" id="UpHour" name="UpHour" class="form-control"
+                                           placeholder="number">
                                 </div>
+
 
                                 <div class="mb-3">
                                     <label class="form-label">Description</label>
-                                    <input type="text" class="form-control" id="uptitle" name="uptitle"
-                                           aria-describedby="description">
+                                    <textarea type="text" class="form-control" id="UpTitle" name="UpTitle" rows="3"></textarea>
                                 </div>
-                            </div>
 
+                            </div>
 
 
                             <button type="submit" class="btn btn-primary">Update</button>
