@@ -97,8 +97,9 @@ class ProfileOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
+        DB::insert('insert into workon(user_id, order_id) values (?,?)', [$request->user_id, $id]);
+        return redirect()->back();
+        }
 
     /**
      * Remove the specified resource from storage.

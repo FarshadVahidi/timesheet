@@ -68,9 +68,12 @@
                                     <td>
                                         <div class="btn-group">
                                             <div>
-                                                <p><a class="btn btn-primary"
-                                                      href="{{ route('admins.Specific.index', $order->order_id) }}">{{ __('Add to this project') }}</a>
-                                                </p>
+                                                <form action="{{ route('admins.ProfileOrder.update', $order->order_id) }}" method="POST">
+                                                    @method("PATCH")
+                                                    @csrf
+                                                    <input type="number" name="user_id" id="user_id" value="{{$user_id}}" hidden>
+                                                    <button type="submit" class="btn btn-primary">{{__('add to this project')}}</button>
+                                                </form>
                                             </div>
                                         </div>
 

@@ -76,8 +76,10 @@ class UserController extends Controller
                 $query->select('order_id')->from('workon')
                     ->where('workon.user_id','=', $user->id);
             })->join('aziende' , 'aziende.id' , '=', 'orders.aziende_id')
+//                ->join('workon', 'workon.order_id', '=', 'orders.id')
                 ->get();
-            return View::make('Admin.user.dedicateOrder', compact('orderWork', 'allOrders'));
+$user_id = $user->id;
+            return View::make('Admin.user.dedicateOrder', compact('orderWork', 'allOrders', 'user_id'));
         }
     }
 
