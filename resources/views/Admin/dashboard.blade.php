@@ -49,20 +49,31 @@
             }
 
             function validateFormUpdate() {
+                let pro = document.UpClick.UpselectId.value;
                 let temp = document.getElementById('UpFerie').checked;
-
+                let hor = document.UpClick.UpHour.value;
 
                 if (temp) {
                     document.UpClick.UpHour.value = 0;
+                    document.UpClick.UpTitle.value = "FERIE";
                     return true;
-                } else if (document.UpClick.UpHour.value > 8.0) {
-                    alert('Hour must be less than 8 hours!');
-                    return false;
-                } else if (document.UpClick.UpHour.value < 0.0) {
-                    alert('Hour can not be less than zero!')
-                    return false;
-                } else {
-                    document.getElementById('UpFerie').value = 0;
+                }else {
+                    if (pro.toString() === "notSelect") {
+                        alert('please select project');
+                        return false;
+                    }
+                    if (hor.trim() === '' || hor.toString() === "0") {
+                        alert('hour can not be black or zero');
+                        return false;
+                    }
+                    if (document.UpClick.UpHour.value > 8.0 && document.dayClick.UpHour.value <= 0.0) {
+                        alert('hour must be less than 8 houre and more than zero')
+                        return false;
+                    }
+                    if (document.UpClick.UpTitle.value.toString() === '') {
+                        alert('please insert description for you update');
+                        return false;
+                    }
                     return true;
                 }
             }
@@ -117,16 +128,17 @@
                         })
                     },
                     eventClick: function (info) {
+                        let a = info.event.title.split([" / "]);
                         $('#eventId').val(info.event.id);
                         $('#upid').val(info.event.extendedProps.name);
-                        $('#uptitle').val(info.event.title);
-                        $('#UpStart').val(convert(info.event.start));
+                        $('#UpTitle').val(a[1]);
                         $('#Upselect').val(a[0]);
+                        $('#UpStart').val(convert(info.event.start));
                         $('#UpHour').val(info.event.extendedProps.hour);
                         $('#update').html('Update');
 
                         $('#farshad').dialog({
-                            title: 'Update Hour',
+                            title: 'Update event',
                             draggable: true,
                             resizable: false,
                             position: 'center',
@@ -268,8 +280,6 @@
 
                             <div class="input">
                                 <div class="mb-3">
-{{--                                    <label class="form-check-label">{{__('user')}}</label>--}}
-{{--                                    <input type="text" class="form-control" id="upid" name="upid" readonly>--}}
                                     <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>
                                 </div>
 
@@ -277,11 +287,24 @@
                                     <input type="text" class="form-control" id="Upselect" name="Upselect" readonly>
                                 </div>
 
-{{--                                <div class="mb-3">--}}
-{{--                                    <label class="form-check-label">{{__('date')}}</label>--}}
-{{--                                    <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>--}}
-{{--                                </div>--}}
-
+                                <div class="mb-3">
+                                    <label class="mb-3">{{__('project')}}</label>
+                                    <select class="mb-3" aria-label="Default select example" name="UpselectId"
+                                            id="UpselectId">
+                                        <option value="notSelect" selected disabled>{{__('select project')}}</option>
+                                        @foreach($project as $p)
+                                            <option value="{{$p->order_id}}">{{$p->name}}</option>
+                                        @endforeach
+                                        <button onclick="addOption()">{{__('Add project')}}</button>
+                                        <script type="text/javascript">
+                                            function addOption() {
+                                                optionText = 'New element';
+                                                optionValue = 'newElement';
+                                                $('#selectId').append('<option value="${optionValue}">${optionText}</option>');
+                                            }
+                                        </script>
+                                    </select>
+                                </div>
 
                                 <div class="input-group flex-nowrap mb-3">
                                     <span class="input-group-text" id="addon-wrapping">Hours</span>
@@ -290,8 +313,8 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Description</label>
-                                    <input type="text" class="form-control" id="uptitle" name="uptitle"
-                                           aria-describedby="description">
+                                    <textarea type="text" class="form-control" id="UpTitle" name="UpTitle"
+                                              rows="3"></textarea>
                                 </div>
                             </div>
 

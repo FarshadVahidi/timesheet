@@ -147,7 +147,7 @@
                         $('#update').html('Update');
 
                         $('#farshad').dialog({
-                            title: 'Update Hour',
+                            title: 'Update event',
                             draggable: true,
                             resizable: false,
                             position: 'center',

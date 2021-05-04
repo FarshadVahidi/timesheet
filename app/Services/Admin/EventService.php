@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\Event;
+use App\Models\Order;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -23,12 +24,17 @@ class EventService{
         $event->user_id = $request->user()->id;
         $event->start = $request->start;
         $event->allDay = $request->allDay;
-        $event->title = $request->title;
         $event->hour = $request->hour;
-        if($request->has('ferie'))
+        if($request->has('ferie')){
             $event->ferie = true;
-        else
+            $event->order_id = null;
+            $event->title = 'FERIE';
+        } else{
             $event->ferie = false;
+            $event->order_id = $request->selectId;
+            $event->title = self::makeTitle($request);
+        }
+
         $event->save();
     }
 
@@ -63,15 +69,16 @@ class EventService{
 
     public static function update($request , $event)
     {
-        if($request->has('UpFerie'))
+        $event->hour = $request->UpHour;
+        if( ! $request->has('UpFerie'))
         {
-            $event->ferie = true;
-            $event->hour = 0;
-            $event->title = "FERIE";
-        }else{
-            $event->title = $request->uptitle;
-            $event->hour = $request->UpHour;
             $event->ferie = false;
+            $event->title = self::makeUpTitle($request);
+            $event->order_id = $request->UpselectId;
+        }else{
+            $event->ferie = true;
+            $event->order_id = NULL;
+            $event->title = 'FERIE';
         }
 
         $event->update();
@@ -106,5 +113,22 @@ class EventService{
             }
 
         }
+    }
+
+    private static function makeTitle($request): string
+    {
+        $p = Order::where('id','=', $request->selectId)->pluck('name');
+        return $p[0] . " / " . $request->title;
+    }
+
+    private static function makeUpTitle($request): string
+    {
+//        dd($request->UpTitle);
+//        $s = (explode('-', $request->UpTitle));
+//        dd($s);
+
+        $p = Order::where('id','=', $request->UpselectId)->pluck('name');
+
+        return $p[0] . " / " . $request->UpTitle;
     }
 }
