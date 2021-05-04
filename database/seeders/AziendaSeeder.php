@@ -19,5 +19,13 @@ class AziendaSeeder extends Seeder
             'p_iva' => Str::random(10),
             'name' => 'its prodigy',
         ]);
+        DB::table('aziende')->insert([
+            'p_iva' => Str::random(10),
+            'name' => 'second',
+        ]);
+        DB::table('aziende')->insert([
+            'p_iva' => Str::random(10),
+            'name' => 'thierd',
+        ]);
     }
 }

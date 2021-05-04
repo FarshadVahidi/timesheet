@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Providers\User\EventProvider;
-use App\Services\User\EventService;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
-class AutoFillController extends Controller
+class SpecificController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,7 +37,10 @@ class AutoFillController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $u = $request->user;
+        $o = $request->order;
+        $works = Event::where('user_id' , $u)->where('order_id', $o)->get();
+        return View::make('Admin.profile.staffHourDetail', compact('works'));
     }
 
     /**
@@ -68,14 +70,11 @@ class AutoFillController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-
-//        (new EventProvider($request))->AutoFill($request, $id);
-        EventService::AutoFill($request, $id);
-        return redirect(route('dashboard'));
+        //
     }
 
     /**

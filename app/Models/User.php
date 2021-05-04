@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function orders()
+    {
+        $this->belongsToMany(Order::class);
+    }
 }

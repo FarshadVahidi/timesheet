@@ -1,50 +1,57 @@
 <x-app-layout>
-
     @section('MyStyles')
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css"
               href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
     @endsection
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 @section('mainContent')
 
+                    @if(Session::has('message'))
+                        <script>
+                            swal("OK!", "{!! Session::get('message') !!}", "success",{
+                                button:"OK",
+                            })
+                        </script>
+                    @endif
+
+                    @if(Session::has('error'))
+                        <script>
+                            swal("OOPS!", "{!! Session::get('message') !!}", "error",{
+                                button:"OK",
+                            })
+                        </script>
+                    @endif
+
+                    <div>
+                        <a href="{{route('admins.Order.create')}}" class="btn btn-primary my-3">{{__('Create Order')}}</a>
+                    </div>
 
                     <div class="cal-md-1">
                         <table class="table table-bordered data-table" id="datatable">
                             <thead>
                             <tr>
-                                <th scope="col">{{ __('Name') }}</th>
-                                <th scope="col">{{ __('Email') }}</th>
+                                <th scope="col">{{ __('order') }}</th>
+                                <th scope="col">{{ __('start') }}</th>
+                                <th scope="col">{{ __('days') }}</th>
+                                <th scope="col">{{ __('cost') }}</th>
                                 <th scope="col">{{ __('Action') }}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($users as $user)
+                            @foreach($orders as $order)
                                 <tr>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $order->name }}</td>
+                                    <td>{{ $order->start }}</td>
+                                    <td>{{ $order->days }}</td>
+                                    <td>{{ $order->cost }}</td>
                                     <td>
                                         <div class="btn-group">
                                             <div>
                                                 <p><a class="btn btn-primary"
-                                                      href="{{ route('admins.user.show', $user->id) }}">{{ __('Project work on') }}</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="btn-group">
-                                            <div>
-                                                <p><a class="btn btn-info"
-                                                      href="{{ route('admins.event.edit', $user->id) }}">{{ __('Each month') }}</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="btn-group">
-                                            <div>
-                                                <p><a class="btn btn-info"
-                                                      href="{{ route('admins.event.show', $user->id) }}">{{ __('All Ferie') }}</a>
+                                                      href="{{route('admins.ProfileOrder.show', $order->id)}}">{{ __('How Works on it') }}</a>
                                                 </p>
                                             </div>
                                         </div>

@@ -1,51 +1,60 @@
 <x-app-layout>
-
     @section('MyStyles')
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css"
               href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
     @endsection
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 @section('mainContent')
 
+                    @if(Session::has('message'))
+                        <script>
+                            swal("OK!", "{!! Session::get('message') !!}", "success", {
+                                button: "OK",
+                            })
+                        </script>
+                    @endif
+
+                    @if(Session::has('error'))
+                        <script>
+                            swal("OOPS!", "{!! Session::get('message') !!}", "error", {
+                                button: "OK",
+                            })
+                        </script>
+                    @endif
+
+                    <div>
+                        <h3>{{$workon[0]->orderName}}</h3>
+                    </div>
 
                     <div class="cal-md-1">
                         <table class="table table-bordered data-table" id="datatable">
                             <thead>
                             <tr>
-                                <th scope="col">{{ __('Name') }}</th>
-                                <th scope="col">{{ __('Email') }}</th>
+                                <th scope="col">{{ __('work on') }}</th>
+                                <th scope="col">{{ __('total hours') }}</th>
+                                <th scope="col">{{ __('days') }}</th>
                                 <th scope="col">{{ __('Action') }}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($users as $user)
+                            @foreach($workon as $w)
                                 <tr>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $w->name }}</td>
+                                    <td>{{ $w->hours }}</td>
+                                    <td>{{ $w->days }}</td>
                                     <td>
                                         <div class="btn-group">
                                             <div>
-                                                <p><a class="btn btn-primary"
-                                                      href="{{ route('admins.user.show', $user->id) }}">{{ __('Project work on') }}</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="btn-group">
-                                            <div>
-                                                <p><a class="btn btn-info"
-                                                      href="{{ route('admins.event.edit', $user->id) }}">{{ __('Each month') }}</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="btn-group">
-                                            <div>
-                                                <p><a class="btn btn-info"
-                                                      href="{{ route('admins.event.show', $user->id) }}">{{ __('All Ferie') }}</a>
-                                                </p>
+
+                                                <form method="POST" action="{{route('admins.Specific.store')}}">
+                                                    <input name="user" id="user" value="{{$w->user_id}}" hidden>
+                                                    <input name="order" id="order" value="{{$w->order_id}}" hidden>
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary">{{__('Detail')}}</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </td>
@@ -78,3 +87,4 @@
         </script>
     @endsection
 </x-app-layout>
+

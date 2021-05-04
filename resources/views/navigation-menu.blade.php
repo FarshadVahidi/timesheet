@@ -75,6 +75,13 @@
                             {{ __('Azienda') }}
                         </x-jet-nav-link>
                     </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('admins.ProfileOrder.index') }}"
+                                        :active="request()->routeIs('admins.ProfileOrder.index')">
+                            {{ __('Profile') }}
+                        </x-jet-nav-link>
+                    </div>
                 @endif
 
             </div>
@@ -265,6 +272,11 @@
                 <x-jet-responsive-nav-link href="{{ route('admins.Azienda.index') }}"
                                            :active="request()->routeIs('admins.Azienda.index')">
                     {{ __('Aziende') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('admins.ProfileOrder.index') }}"
+                                           :active="request()->routeIs('admins.ProfileOrder.index')">
+                    {{ __('Profile') }}
                 </x-jet-responsive-nav-link>
             @endif
         </div>

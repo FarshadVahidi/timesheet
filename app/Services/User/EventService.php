@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Models\Event;
+use App\Models\Order;
 use Carbon\Carbon;
 
 class EventService{
@@ -16,26 +17,37 @@ class EventService{
     {
         $event = new Event();
         $event->user_id = $request->user()->id;
+
         $event->start = $request->start;
-        $event->end = $request->end;
         $event->allDay = $request->allDay;
-        $event->title = $request->title;
         $event->hour = $request->hour;
-        if($request->has('ferie'))
+        if ($request->has('ferie')) {
             $event->ferie = true;
-        else
+            $event->order_id = null;
+            $event->title = 'FERIE';
+        } else {
             $event->ferie = false;
+            $event->order_id = $request->selectId;
+            $event->title = self::makeTitle($request);
+    }
         $event->save();
     }
 
     public static function update($request, $event)
     {
-        $event->title = $request->uptitle;
+
         $event->hour = $request->UpHour;
-        if(! $request->has('UpFerie'))
+        if(! $request->has('UpFerie')){
             $event->ferie = false;
-        else
+            $event->title = self::makeUpTitle($request);
+            $event->order_id = $request->UpselectId;
+        }
+        else{
             $event->ferie = true;
+            $event->order_id = NULL;
+            $event->title = 'FERIE';
+        }
+
         $event->update();
     }
 
@@ -60,7 +72,7 @@ class EventService{
 
                     $event = new Event();
                     $event->start = $dt->toDate();
-                    $event->end = $dt->addDay()->toDate();
+                    $event->order_id = null;
                     $event->hour = 8;
                     $event->title = 'Auto Fill';
                     $event->user_id = $id;
@@ -74,5 +86,28 @@ class EventService{
                 $dt->addDay();
             }
         }
+    }
+
+    /**
+     * @param $request
+     * @return string
+     */
+    private static function makeTitle($request): string
+    {
+//        dd($request);
+        $p = Order::where('id','=', $request->selectId)->pluck('name');
+//dd($p);
+        return $p[0] . " / " . $request->title;
+    }
+
+    private static function makeUpTitle($request): string
+    {
+//        dd($request->UpTitle);
+//        $s = (explode('-', $request->UpTitle));
+//        dd($s);
+
+        $p = Order::where('id','=', $request->UpselectId)->pluck('name');
+
+        return $p[0] . " / " . $request->UpTitle;
     }
 }
