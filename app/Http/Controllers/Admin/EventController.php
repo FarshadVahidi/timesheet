@@ -48,16 +48,48 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
-        if($entry === null){
-            EventService::store($request);
-            Session::flash('message', 'stored successfuly');
-            return redirect(route('dashboard'));
+
+
+        $temp = Event::select('ferie')->where('user_id', '=', auth()->user()->id)->where('start', '=', $request->start)->get()->pluck('ferie');
+
+        $ex = Event::where('user_id', '=', auth()->user()->id)->where('start', '=', $request->start)->where('order_id' , '=', $request->selectId)->get();
+
+        if(empty($ex[0])){
+            if(empty($temp) || empty($temp[0])){
+                //select sum(hour) from events where user_id = 3 and start='2021-04-30'
+                $hour = Event::select([
+                    DB::raw("SUM(hour) as hour"),
+                ])->where('user_id', '=', auth()->user()->id)->where('start' , '=', $request->start)->groupBy('start')->get()->pluck('hour');
+//            dd($request->hour + $hour[0]);
+                if( empty($hour[0]) || $hour[0] + $request->hour <= 8.0 ){
+                    EventService::store($request);
+                    Session::flash('message', 'you hour added successfully!');
+                    return redirect()->back();
+                }else{
+                    //sweet alert not working
+                    Session::flash('error', 'you can not enter more than 8 hour work');
+                    return redirect()->back();
+                }
+            }else{
+                Session::flash('error' , 'YOU CAN NOT ENTER FOR FERIE DAY WORKING HOUR please use update option');
+                return redirect()->back();
+            }
         }else{
-            //sweet alert not working
-            Session::flash('error', 'There was problem');
-            return redirect(route('dashboard'));
+            Session::flash('error', 'YOU HAVE ENTRY FOR THIS PROJECT PRLEASE USE UPDATE');
+            return redirect()->back();
         }
+
+
+//        $entry = Event::where('user_id', '=', $request->user()->id)->where('start', '=', $request->start)->first();
+//        if($entry === null){
+//            EventService::store($request);
+//            Session::flash('message', 'stored successfuly');
+//            return redirect(route('dashboard'));
+//        }else{
+//            //sweet alert not working
+//            Session::flash('error', 'There was problem');
+//            return redirect(route('dashboard'));
+//        }
     }
 
     /**

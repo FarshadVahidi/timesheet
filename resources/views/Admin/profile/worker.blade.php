@@ -48,9 +48,13 @@
                                     <td>
                                         <div class="btn-group">
                                             <div>
-                                                <p><a class="btn btn-primary"
-                                                      href="{{route('admins.ProfileOrder.show', $w->user_id)}}">{{ __('Detail') }}</a>
-                                                </p>
+
+                                                <form method="POST" action="{{route('admins.Specific.store')}}">
+                                                    <input name="user" id="user" value="{{$w->user_id}}" hidden>
+                                                    <input name="order" id="order" value="{{$w->order_id}}" hidden>
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary">{{__('Detail')}}</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </td>

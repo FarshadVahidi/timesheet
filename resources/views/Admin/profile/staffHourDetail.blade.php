@@ -19,7 +19,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($allHour as $hour)
+                        @foreach($works as $hour)
                             <tr>
                                 <td>{{ $hour->start }}</td>
                                 <td>{{ $hour->title }}</td>

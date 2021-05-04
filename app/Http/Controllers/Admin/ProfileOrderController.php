@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
 class ProfileOrderController extends Controller
@@ -67,7 +68,13 @@ class ProfileOrderController extends Controller
             ->selectRaw('sum(hour) as hours')
             ->selectRaw('count(events.start) as days')
             ->get();
-        return View::make('Admin.profile.worker', compact('workon'));
+        if(!empty($workon[0]))
+            return View::make('Admin.profile.worker', compact('workon'));
+        else{
+            Session::flash('error' , 'there is no record for this order yet');
+            return redirect()->back();
+        }
+
     }
 
     /**
