@@ -121,6 +121,7 @@
                         $('#upid').val(info.event.extendedProps.name);
                         $('#uptitle').val(info.event.title);
                         $('#UpStart').val(convert(info.event.start));
+                        $('#Upselect').val(a[0]);
                         $('#UpHour').val(info.event.extendedProps.hour);
                         $('#update').html('Update');
 
@@ -213,12 +214,6 @@
                                         <input type="text" class="form-control" id="start" name="start" readonly>
                                     </div>
 
-                                    <div class="input-group flex-nowrap mb-3">
-                                        <span class="input-group-text" id="addon-wrapping">{{ __('Hours') }}</span>
-                                        <input type="number" step="0.01" id="hour" name="hour" class="form-control"
-                                               placeholder="number">
-                                    </div>
-
                                     <div class="mb-3">
                                         <label class="mb-3">{{__('project')}}</label>
                                         <select class="mb-3" aria-label="Default select example" name="selectId"
@@ -239,10 +234,17 @@
                                         </select>
                                     </div>
 
+                                    <div class="input-group flex-nowrap mb-3">
+                                        <span class="input-group-text" id="addon-wrapping">{{ __('Hours') }}</span>
+                                        <input type="number" step="0.01" id="hour" name="hour" class="form-control"
+                                               placeholder="number">
+                                    </div>
+
+
+
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('Description')}}</label>
-                                        <input type="text" class="form-control" id="title" name="title"
-                                               aria-describedby="description">
+                                        <label class="form-label">Description</label>
+                                        <textarea type="text" class="form-control" id="title" name="title" rows="3"></textarea>
                                     </div>
                                 </div>
 
@@ -266,14 +268,19 @@
 
                             <div class="input">
                                 <div class="mb-3">
-                                    <label class="form-check-label">{{__('user')}}</label>
-                                    <input type="text" class="form-control" id="upid" name="upid" readonly>
+{{--                                    <label class="form-check-label">{{__('user')}}</label>--}}
+{{--                                    <input type="text" class="form-control" id="upid" name="upid" readonly>--}}
+                                    <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-check-label">{{__('date')}}</label>
-                                    <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>
+                                    <input type="text" class="form-control" id="Upselect" name="Upselect" readonly>
                                 </div>
+
+{{--                                <div class="mb-3">--}}
+{{--                                    <label class="form-check-label">{{__('date')}}</label>--}}
+{{--                                    <input type="text" class="form-control" id="UpStart" name="UpStart" readonly>--}}
+{{--                                </div>--}}
 
 
                                 <div class="input-group flex-nowrap mb-3">

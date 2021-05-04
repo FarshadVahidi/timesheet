@@ -12,7 +12,9 @@ class EventService{
     {
         return DB::table('users')
             ->join('events', 'user_id', '=', 'users.id')
-            ->select('events.id','user_id', 'start', 'allDay', 'hour', 'title', 'name')->get();
+            ->select('events.id','user_id', 'start', 'allDay', 'hour', 'title', 'name')
+            ->where('user_id' , auth()->user()->id)
+            ->get();
     }
 
     public static function store($request)

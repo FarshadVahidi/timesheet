@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Order;
 use App\Models\User;
 use App\Providers\Admin\UserProvider;
 use App\Services\Admin\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\VarDumper\Cloner\Data;
@@ -62,8 +64,20 @@ class UserController extends Controller
     public function show(User $user)
     {
         if(!empty($user) && !empty($user->id)){
-            $allHour = UserService::show($user);
-            return View::make('Admin.user.show', compact('allHour'));
+
+            $orderWork = DB::table('workon')->join('orders', 'order_id' , '=' , 'orders.id')
+                ->join('aziende', 'aziende.id' , '=', 'orders.aziende_id')
+                ->join('users', 'user_id', '=', 'users.id')
+                ->where('workon.user_id','=', $user->id)
+                ->select('user_id', 'order_id', 'orders.name', 'aziende.name as aziendaName', 'users.name as user_name')
+                ->get();
+//dd($orderWork);
+            $allOrders = Order::select('orders.id as order_id', 'orders.name as order_name', 'aziende.name as aziendeName')->whereNotIn('orders.id', function($query) use ($user) {
+                $query->select('order_id')->from('workon')
+                    ->where('workon.user_id','=', $user->id);
+            })->join('aziende' , 'aziende.id' , '=', 'orders.aziende_id')
+                ->get();
+            return View::make('Admin.user.dedicateOrder', compact('orderWork', 'allOrders'));
         }
     }
 
