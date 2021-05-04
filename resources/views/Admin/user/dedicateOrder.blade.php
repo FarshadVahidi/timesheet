@@ -34,9 +34,12 @@
                                 <td>
                                     <div class="btn-group">
                                         <div>
-                                            <p><a class="btn btn-primary"
-                                                  href="{{ route('admins.Specific.index', $user->order_id) }}">{{ __('Eleminate from this project') }}</a>
-                                            </p>
+                                            <form action="{{ route('admins.ProfileOrder.destroy', $user->order_id) }}" method="POST">
+                                                @method("DELETE")
+                                                @csrf
+                                                <input type="number" name="user_id" id="user_id" value="{{$user->user_id}}" hidden>
+                                                <button type="submit" class="btn btn-danger">{{__('Eliminate from this project')}}</button>
+                                            </form>
                                         </div>
                                     </div>
 

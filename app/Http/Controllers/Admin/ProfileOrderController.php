@@ -108,6 +108,7 @@ class ProfileOrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $temp = DB::table('workon')->where('user_id', \request()->user_id)->where('order_id', $id)->delete();
+        return redirect()->back();
     }
 }
