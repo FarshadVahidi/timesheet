@@ -48,4 +48,10 @@ class PDFController extends Controller
         PdfService::index()->Output();
         exit;
     }
+
+    public function edit($id)
+    {
+        PdfService::edit($id)->Output();
+        exit;
+    }
 }

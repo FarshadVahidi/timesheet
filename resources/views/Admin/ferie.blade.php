@@ -24,8 +24,12 @@
 
                             </tbody>
                         </table>
-                        <div class="">
+                        <div class="mb-3">
                             <a href="{{route('admins.PDF.show', $ferie->user_id)}}" class="btn btn-info">print</a>
+                        </div>
+
+                        <div class="mb-3">
+                            <a href="{{route('admins.PDF.edit', $ferie->user_id)}}" class="btn btn-info">print year</a>
                         </div>
                     </div>
                 @endsection
