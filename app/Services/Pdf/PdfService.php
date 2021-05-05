@@ -244,4 +244,58 @@ class PdfService{
 
         return $fpdf;
     }
+
+    public static function edit($id)
+    {
+        $dt = \Carbon\Carbon::now();
+        $dt->month = 1;
+        $dt->day = 1;
+
+        $de = \Carbon\Carbon::now();
+        $de->month = 12;
+        $de->day = 31;
+
+
+        $allFerie = Event::select('start')->where('ferie', 1)->where('start', '>=', $dt)->where('user_id', $id)->orderBy('start')->get();
+
+        $len = Event::where('ferie', 1)->where('start', '>=', $dt)->where('user_id', $id)->count('start');
+        $name = User::findOrFail($id);
+
+        $fpdf = new FPDF('l', 'mm', 'A4');
+        $fpdf->AddPage();
+
+        $fpdf->SetFont('Arial', 'B',  14);
+
+        $fpdf->Cell(275, 15, '', 0,1);
+        $fpdf->Cell(275, 20, $name->name , 0, 1, 'C');
+        $fpdf->Cell(150, 10, 'ALL FERIE FOR ', 0, 0, 'R');
+        $fpdf->Cell(125.5, 10, $dt->year, 0, 1, 'L');
+        $fpdf->Cell(275, 10, '', 0, 1);
+
+
+        $fpdf->SetFont('Arial', '',  14);
+        $fpdf->SetFillColor(180,180,255);
+        $fpdf->SetDrawColor(50,50,50);
+        $month = 1;
+        $countFerie = 0;
+
+        while($dt <= $de) {
+            $fpdf->Cell(27, 10, $dt->englishMonth, 1, 0, 'C');
+
+                while ($month == $dt->month) {
+
+                    if($len > $countFerie && $allFerie[$countFerie]->start == $dt->toDateString()){
+
+                        $fpdf->Cell(8, 10, $dt->day, 1, 0, 'C', true);
+                        $countFerie++;
+                    }else{
+                        $fpdf->Cell(8, 10, $dt->day, 1, 0, 'C');
+                    }
+                    $dt->addDay();
+                }
+                $month++;
+                $fpdf->Cell(8, 10, '', 0, 1);
+        }
+        return $fpdf;
+    }
 }

@@ -49,6 +49,11 @@
                         <div class="m-2">
                             <a href="{{route('users.Google.index')}}" class="btn btn-info">{{__('Save on Google Drive')}}</a>
                         </div>
+
+
+                        <div class="m-2">
+                            <a href="{{route('users.PDF.edit', auth()->user()->id)}}" class="btn btn-info">{{__('print year')}}</a>
+                        </div>
                     </div>
                 @endsection
             </div>
