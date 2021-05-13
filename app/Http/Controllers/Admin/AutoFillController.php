@@ -77,10 +77,10 @@ class AutoFillController extends Controller
         {
             EventService::AutoFill($request, $id);
             Session::flash('message', 'update successfully!');
-            return View::make('Admin.dashboard');
+            return redirect()->back();
         }
         Session::flash('error', 'there was a problem');
-        return View::make('Admin.dashboard');
+        return redirect()->back();
 
     }
 
