@@ -94,9 +94,9 @@ class PdfService{
         $fpdf->Cell(40, 8, 'Attivita\'', 1, 1, 'C');
         foreach($data as $p)
         {
-            $t = $p->title;
+//            $t = $p->title;
             $g = \Carbon\Carbon::create($p->month);
-            $len = strlen($p->title);
+//            $len = strlen($p->title);
             $fpdf->Cell(30, 8, '', 0);
 
             $fpdf->Cell(40, 8, $p->month, 'LR', 0, 'C');
@@ -105,18 +105,18 @@ class PdfService{
 
             $fpdf->Cell(20, 8, $p->hour, 'LR',0, 'C');
 
-            $txt = str_split($t, 20);
-            $fpdf->Cell(40, 8, $txt[0], 'LR', 1, 'C');
+//            $txt = str_split($t, 20);
+            $fpdf->Cell(40, 8, '', 'LR', 1, 'C');
 
-            if($len > 20){
-                for($i=1 ; $i< $len/20 ; $i++){
-                    $fpdf->Cell(30, 8, '', 0);
-                    $fpdf->Cell(40, 8, '', 'LR' , 0);
-                    $fpdf->Cell(30, 8, '', 'LR' , 0);
-                    $fpdf->Cell(20, 8, '', 'LR' , 0);
-                    $fpdf->Cell(40, 8, $txt[$i], 'LR', 1);
-                }
-            }
+//            if($len > 20){
+//                for($i=1 ; $i< $len/20 ; $i++){
+//                    $fpdf->Cell(30, 8, '', 0);
+//                    $fpdf->Cell(40, 8, '', 'LR' , 0);
+//                    $fpdf->Cell(30, 8, '', 'LR' , 0);
+//                    $fpdf->Cell(20, 8, '', 'LR' , 0);
+//                    $fpdf->Cell(40, 8, $txt[$i], 'LR', 1);
+//                }
+//            }
         }
         $fpdf->Cell(30, 8, '', 0,0);
         $fpdf->Cell(130, 8, '', 'T', 0);

@@ -70,12 +70,13 @@ class ActivityProvider extends ServiceProvider
         $data = DB::table('events')
             ->select([
                 \DB::raw("DATE_FORMAT(start, '%Y-%m-%d') as month"),
-                'hour',
-                'title'
+                \DB::raw("SUM(hour) as hour"),
+//                'title'
             ])
             ->where('start', '>=' , $dt)
             ->where('start', '<', $de)
             ->where('user_id', '=' , $id)
+            ->groupBy('start')
             ->orderBy('start')
             ->get();
         return $data;
