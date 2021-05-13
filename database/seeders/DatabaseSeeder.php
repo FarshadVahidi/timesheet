@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(WorkOn::class);
         $this->call(CategorySeeder::class);
         $this->call(StatusSeeder::class);
+        $this->call(CespitiSeeder::class);
 
     }
 }

@@ -22,6 +22,7 @@ class CreateCespitosTable extends Migration
             $table->foreignId('status_id')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->string('costo');
             $table->date('acquisto');
+            $table->foreignId('user_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }
