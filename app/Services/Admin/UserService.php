@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserService{
@@ -20,6 +21,8 @@ class UserService{
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save();
+
+        DB::table('workon')->insert(['user_id' => $user->id, 'order_id' => 1]);
         $user->attachRole($request->role_id);
     }
 

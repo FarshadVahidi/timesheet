@@ -16,7 +16,16 @@ class OrderSeeder extends Seeder
     public function run()
     {
         DB::table('orders')->insert([
-            'name' => 'test project1 SECOND',
+           'name' => 'DEFAULT PROJECT FOR OUR COMPANY',
+            'aziende_id' => 1,
+            'start' => '2021-01-01',
+            'end' => '2021-01-29',
+            'days' => 365,
+            'cost' => 0,
+
+        ]);
+        DB::table('orders')->insert([
+            'name' => 'Conbon',
             'aziende_id' => 2,
             'start' => '2021-05-10',
             'end' => '2021-06-10',
@@ -25,7 +34,7 @@ class OrderSeeder extends Seeder
         ]);
 
         DB::table('orders')->insert([
-            'name' => 'test project2 SECOND',
+            'name' => 'Agili',
             'aziende_id' => 2,
             'start' => '2021-05-15',
             'end' => '2021-06-15',
@@ -34,7 +43,7 @@ class OrderSeeder extends Seeder
         ]);
 
         DB::table('orders')->insert([
-            'name' => 'test project1 THIRD',
+            'name' => 'Spiral',
             'aziende_id' => 3,
             'start' => '2021-05-10',
             'end' => '2021-06-10',
@@ -43,7 +52,7 @@ class OrderSeeder extends Seeder
         ]);
 
         DB::table('orders')->insert([
-            'name' => 'test project2 THIRD',
+            'name' => 'Book Shelves',
             'aziende_id' => 3,
             'start' => '2021-05-10',
             'end' => '2021-06-10',

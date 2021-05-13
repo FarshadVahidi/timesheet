@@ -19,6 +19,7 @@ class OrderService{
                 'aziende.name',
                 'orders.cost',
                 'orders.aziende_id')
+            ->where('orders.id', '<>', 1)
             ->get();
     }
 

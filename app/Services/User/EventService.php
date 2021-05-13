@@ -99,9 +99,9 @@ class EventService{
 
                     $event = new Event();
                     $event->start = $dt->toDate();
-                    $event->order_id = null;
+                    $event->order_id = 1;
                     $event->hour = 8;
-                    $event->title = 'Auto Fill';
+                    $event->title = 'DEFAULT PROJECT / Auto Fill';
                     $event->user_id = $id;
                     $event->allDay = 1;
                     $event->ferie = false;
