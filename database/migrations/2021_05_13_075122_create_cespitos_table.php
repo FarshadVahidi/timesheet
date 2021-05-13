@@ -13,8 +13,15 @@ class CreateCespitosTable extends Migration
      */
     public function up()
     {
-        Schema::create('cespitos', function (Blueprint $table) {
+        Schema::create('cespiti', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('categoris_id')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->string('serialnumber');
+            $table->string('marco');
+            $table->string('modello');
+            $table->foreignId('status_id')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->string('costo');
+            $table->date('acquisto');
             $table->timestamps();
         });
     }
