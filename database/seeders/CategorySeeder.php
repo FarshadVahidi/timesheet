@@ -23,9 +23,9 @@ class CategorySeeder extends Seeder
         DB::table('categoris')->insert([
             'name' => 'telefoni'
         ]);
-        DB::table('categoris')->insert([
-            'name' => 'office'
-        ]);
+//        DB::table('categoris')->insert([
+//            'name' => 'office'
+//        ]);
         DB::table('categoris')->insert([
            'name' => 'accessori'
         ]);
