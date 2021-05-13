@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Categori;
 use App\Models\Cespito;
+use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,7 @@ class CespitiController extends Controller
     {
         $data = DB::table('cespiti')
             ->join('categoris', 'categoris_id', '=', 'categoris.id')
-            ->join('statuses', 'status_id' , '=', 'statuses.id')
+            ->join('statuses', 'status_id', '=', 'statuses.id')
             ->leftJoin('users', 'user_id', '=', 'users.id')
             ->select('cespiti.id', 'categoris.name', 'marco', 'status', 'users.name as userName')
             ->get();
@@ -38,34 +39,47 @@ class CespitiController extends Controller
      */
     public function create()
     {
-        //
+        $categori = Categori::all();
+        $status = Status::all();
+        return View::make('Admin.cespiti.create', compact('categori', 'status'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $cespito = new Cespito();
+        $cespito->create([
+            'categoris_id' => $request->category,
+            'serialnumber' => $request->serialnumber,
+            'marco' => $request->marco,
+            'modello' => $request->modello,
+            'status_id' => $request->status,
+            'costo' => $request->costo,
+            'acquisto' => $request->acquisto,
+        ]);
+        Session::flash('message', 'added to database');
+        return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $data = DB::table('cespiti')
             ->join('categoris', 'categoris_id', '=', 'categoris.id')
-            ->join('statuses', 'status_id' , '=', 'statuses.id')
-            ->leftJoin('users', 'users.id' , '=', 'cespiti.user_id')
-            ->select('cespiti.id as id', 'serialnumber', 'marco', 'modello', 'statuses.id as status_id' , 'statuses.status as status', 'costo', 'acquisto' ,'categoris.name', 'cespiti.user_id as user_id', 'users.id as userId', 'users.name as userName')
-            ->where('cespiti.id' , $id)
+            ->join('statuses', 'status_id', '=', 'statuses.id')
+            ->leftJoin('users', 'users.id', '=', 'cespiti.user_id')
+            ->select('cespiti.id as id', 'serialnumber', 'marco', 'modello', 'statuses.id as status_id', 'statuses.status as status', 'costo', 'acquisto', 'categoris.name', 'cespiti.user_id as user_id', 'users.id as userId', 'users.name as userName')
+            ->where('cespiti.id', $id)
             ->get();
         $status = DB::table('statuses')->get();
         $user = User::all();
@@ -75,7 +89,7 @@ class CespitiController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -86,17 +100,17 @@ class CespitiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $data = Cespito::findOrFail($id);
 //dd($request);
-        if(!empty($request->status))
+        if (!empty($request->status))
             $data->update(['status_id' => $request->status]);
-        if($request->user == -1)
+        if ($request->user == -1)
             $data->update(['user_id' => null]);
         else
             $data->update(['user_id' => $request->user]);
@@ -108,7 +122,7 @@ class CespitiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

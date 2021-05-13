@@ -25,9 +25,9 @@
                         </script>
                     @endif
 
-{{--                    <div>--}}
-{{--                        <a href="{{route('admins.cespito.create')}}" class="btn btn-primary my-3">{{__('Create cespito')}}</a>--}}
-{{--                    </div>--}}
+                    <div>
+                        <a href="{{route('admins.Cespiti.create')}}" class="btn btn-primary my-3">{{__('Create cespito')}}</a>
+                    </div>
 
                     <div class="cal-md-1">
                         <table class="table table-bordered data-table" id="datatable">
