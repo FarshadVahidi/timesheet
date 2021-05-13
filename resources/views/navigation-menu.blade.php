@@ -32,6 +32,13 @@
                             {{ __('All My Ferie') }}
                         </x-jet-nav-link>
                     </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('users.Cespiti.index') }}"
+                                        :active="request()->routeIs('users.Cespiti.index')">
+                            {{ __('Cespiti') }}
+                        </x-jet-nav-link>
+                    </div>
                 @endif
 
                 @if(auth()->user()->hasRole('administrator'))
@@ -246,6 +253,11 @@
                 <x-jet-responsive-nav-link href="{{ route('users.event.show', auth()->user()->id) }}"
                                            :active="request()->routeIs('users.event.show')">
                     {{ __('All My Ferie') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('users.Cespiti.index') }}"
+                                           :active="request()->routeIs('users.Cespiti.index')">
+                    {{ __('Cespiti') }}
                 </x-jet-responsive-nav-link>
 
             @endif
