@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
             Route::resource('autofill', App\Http\Controllers\User\AutoFillController::class);
             Route::resource('PDF' , App\Http\Controllers\PDF\PDFController::class);
             Route::resource('Google', App\Http\Controllers\User\GoogleDriveController::class);
+            Route::resource('Cespiti', App\Http\Controllers\User\CespitiController::class);
         });
 
         Route::group(['middleware' => 'role:administrator', 'prefix' => 'admin', 'as' => 'admins.'], function () {
@@ -48,6 +49,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
             Route::resource('Contratto', App\Http\Controllers\Admin\ContrattoController::class);
             Route::resource('ProfileOrder', App\Http\Controllers\Admin\ProfileOrderController::class);
             Route::resource('Specific' , App\Http\Controllers\Admin\SpecificController::class);
+            Route::resource('Cespiti', App\Http\Controllers\Admin\CespitiController::class);
         });
 
         Route::get('/clear-all-cache', function () {

@@ -32,6 +32,13 @@
                             {{ __('All My Ferie') }}
                         </x-jet-nav-link>
                     </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('users.Cespiti.index') }}"
+                                        :active="request()->routeIs('users.Cespiti.index')">
+                            {{ __('Cespiti') }}
+                        </x-jet-nav-link>
+                    </div>
                 @endif
 
                 @if(auth()->user()->hasRole('administrator'))
@@ -80,6 +87,13 @@
                         <x-jet-nav-link href="{{ route('admins.ProfileOrder.index') }}"
                                         :active="request()->routeIs('admins.ProfileOrder.index')">
                             {{ __('Profile') }}
+                        </x-jet-nav-link>
+                    </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('admins.Cespiti.index') }}"
+                                        :active="request()->routeIs('admins.Cespiti.index')">
+                            {{ __('Cespiti') }}
                         </x-jet-nav-link>
                     </div>
                 @endif
@@ -241,6 +255,11 @@
                     {{ __('All My Ferie') }}
                 </x-jet-responsive-nav-link>
 
+                <x-jet-responsive-nav-link href="{{ route('users.Cespiti.index') }}"
+                                           :active="request()->routeIs('users.Cespiti.index')">
+                    {{ __('Cespiti') }}
+                </x-jet-responsive-nav-link>
+
             @endif
 
             @if(auth()->user()->hasRole('administrator'))
@@ -277,6 +296,11 @@
                 <x-jet-responsive-nav-link href="{{ route('admins.ProfileOrder.index') }}"
                                            :active="request()->routeIs('admins.ProfileOrder.index')">
                     {{ __('Profile') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('admins.Cespiti.index') }}"
+                                           :active="request()->routeIs('admins.Cespiti.index')">
+                    {{ __('Cespiti') }}
                 </x-jet-responsive-nav-link>
             @endif
         </div>
