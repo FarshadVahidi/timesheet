@@ -24,8 +24,10 @@ class CespitiController extends Controller
         $data = DB::table('cespiti')
             ->join('categoris', 'categoris_id', '=', 'categoris.id')
             ->join('statuses', 'status_id' , '=', 'statuses.id')
-            ->select('cespiti.id', 'name', 'marco', 'status')
+            ->leftJoin('users', 'user_id', '=', 'users.id')
+            ->select('cespiti.id', 'categoris.name', 'marco', 'status', 'users.name as userName')
             ->get();
+
         return View::make('Admin.cespiti.index', compact('data'));
     }
 
@@ -65,7 +67,6 @@ class CespitiController extends Controller
             ->select('cespiti.id as id', 'serialnumber', 'marco', 'modello', 'statuses.id as status_id' , 'statuses.status as status', 'costo', 'acquisto' ,'categoris.name', 'cespiti.user_id as user_id', 'users.id as userId', 'users.name as userName')
             ->where('cespiti.id' , $id)
             ->get();
-
         $status = DB::table('statuses')->get();
         $user = User::all();
         return View::make('Admin.cespiti.show', compact('data', 'status', 'user'));

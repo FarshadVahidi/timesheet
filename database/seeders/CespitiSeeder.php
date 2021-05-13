@@ -25,5 +25,15 @@ class CespitiSeeder extends Seeder
             'user_id' => null,
             'acquisto' => Carbon::now(),
         ]);
+        DB::table('cespiti')->insert([
+            'categoris_id' => 2,
+            'serialnumber' => '9876543210',
+            'marco' => 'windows',
+            'modello' => 'serface',
+            'status_id' => 1,
+            'costo' => '300',
+            'user_id' => null,
+            'acquisto' => Carbon::now(),
+        ]);
     }
 }

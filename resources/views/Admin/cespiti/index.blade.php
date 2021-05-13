@@ -36,6 +36,7 @@
                                 <th scope="col">{{ __('Categori') }}</th>
                                 <th scope="col">{{ __('Brand') }}</th>
                                 <th scope="col">{{ __('Status') }}</th>
+                                <th scope="col">{{ __('In-use / Free') }}</th>
                                 <th scope="col">{{ __('Action') }}</th>
                             </tr>
                             </thead>
@@ -45,6 +46,11 @@
                                     <td>{{ $cespito->name }}</td>
                                     <td>{{ $cespito->marco }}</td>
                                     <td>{{ $cespito->status }}</td>
+                                    @if($cespito->userName == null)
+                                        <td>{{ __('Free') }}</td>
+                                        @else
+                                        <td>{{ $cespito->userName }}</td>
+                                    @endif
                                     <td>
                                         <div class="btn-group">
                                             <div>
