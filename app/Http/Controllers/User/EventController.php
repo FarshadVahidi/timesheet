@@ -61,7 +61,6 @@ class EventController extends Controller
 //            dd($request->hour + $hour[0]);
                 if( empty($hour[0]) || $hour[0] + $request->hour <= 8.0 ){
                     EventService::store($request);
-                    Session::flash('message', 'you hour added successfully!');
                     return redirect()->back();
                 }else{
                     //sweet alert not working

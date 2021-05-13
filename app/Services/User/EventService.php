@@ -2,9 +2,15 @@
 
 namespace App\Services\User;
 
+use App\Mail\FerieMail;
 use App\Models\Event;
+use App\Models\FerieAsk;
 use App\Models\Order;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class EventService{
 
@@ -16,21 +22,42 @@ class EventService{
     public static function store ($request)
     {
         $event = new Event();
-        $event->user_id = $request->user()->id;
 
-        $event->start = $request->start;
-        $event->allDay = $request->allDay;
-        $event->hour = $request->hour;
         if ($request->has('ferie')) {
-            $event->ferie = true;
-            $event->order_id = null;
-            $event->title = 'FERIE';
+            $check = FerieAsk::where('name', '=', $request->user()->id)->where('day', '=', $request->start)->get();
+            if(empty($check[0])){
+                $ferie = new FerieAsk();
+                $ferie->day = $request->start;
+                $ferie->name = $request->user()->id;
+                $ferie->save();
+
+
+                $temp = DB::table('users')->where('id', $request->user()->id)->get();
+
+                //send email to user
+                $data = ([
+                    'text' => $temp[0]->name .' Asked vacation for below Data.',
+                    'data' => $request->start,
+                ]);
+
+                Mail::to('test@test.com')->send(new FerieMail($data));
+                Session::flash('message', 'you will recive email for accept or denied your request');
+            }else{
+                Session::flash('error', 'you have asked befor for this day');
+            }
+
         } else {
+            $event->user_id = $request->user()->id;
+            $event->start = $request->start;
+            $event->allDay = $request->allDay;
+            $event->hour = $request->hour;
             $event->ferie = false;
             $event->order_id = $request->selectId;
             $event->title = self::makeTitle($request);
-    }
-        $event->save();
+            $event->save();
+            Session::flash('message', 'you hour added successfully!');
+        }
+
     }
 
     public static function update($request, $event)

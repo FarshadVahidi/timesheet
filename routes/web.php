@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
             Route::resource('ProfileOrder', App\Http\Controllers\Admin\ProfileOrderController::class);
             Route::resource('Specific' , App\Http\Controllers\Admin\SpecificController::class);
             Route::resource('Cespiti', App\Http\Controllers\Admin\CespitiController::class);
+            Route::resource('FerieAsk', App\Http\Controllers\Admin\FerieAskedController::class);
         });
 
         Route::get('/clear-all-cache', function () {

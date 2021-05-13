@@ -1,54 +1,56 @@
 <x-app-layout>
-
     @section('MyStyles')
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css"
               href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
     @endsection
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 @section('mainContent')
 
-                    <div>
-                        <a href="{{route('admins.FerieAsk.index')}}" class="btn btn-primary my-3">{{__('Accept Ferie Asked')}}</a>
-                    </div>
+                    @if(Session::has('message'))
+                        <script>
+                            swal("OK!", "{!! Session::get('message') !!}", "success",{
+                                button:"OK",
+                            })
+                        </script>
+                    @endif
+
+                    @if(Session::has('error'))
+                        <script>
+                            swal("OOPS!", "{!! Session::get('message') !!}", "error",{
+                                button:"OK",
+                            })
+                        </script>
+                    @endif
 
                     <div class="cal-md-1">
                         <table class="table table-bordered data-table" id="datatable">
                             <thead>
                             <tr>
                                 <th scope="col">{{ __('Name') }}</th>
-                                <th scope="col">{{ __('Email') }}</th>
+                                <th scope="col">{{ __('Data') }}</th>
                                 <th scope="col">{{ __('Action') }}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($users as $user)
+                            @foreach($asked as $ask)
                                 <tr>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $ask->name }}</td>
+                                    <td>{{ $ask->day}}</td>
                                     <td>
                                         <div class="btn-group">
                                             <div>
                                                 <p><a class="btn btn-primary"
-                                                      href="{{ route('admins.user.show', $user->id) }}">{{ __('Project work on') }}</a>
+                                                      href="{{route('admins.FerieAsk.show', $ask->id)}}">{{ __('Accept') }}</a>
                                                 </p>
-                                            </div>
-                                        </div>
-                                        <div class="btn-group">
-                                            <div>
-                                                <p><a class="btn btn-info"
-                                                      href="{{ route('admins.event.edit', $user->id) }}">{{ __('Each month') }}</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="btn-group">
-                                            <div>
-                                                <p><a class="btn btn-info"
-                                                      href="{{ route('admins.event.show', $user->id) }}">{{ __('All Ferie') }}</a>
-                                                </p>
+
+                                                <form method="POST" action="{{ route('admins.FerieAsk.destroy', $ask->id) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" onclick="return confirm('Are you sure you want deny collage request?')" class="btn btn-danger">{{ __('Denied') }}</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </td>
@@ -81,3 +83,5 @@
         </script>
     @endsection
 </x-app-layout>
+
+
