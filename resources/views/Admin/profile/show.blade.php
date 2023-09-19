@@ -51,7 +51,7 @@
                                         <div class="btn-group">
                                             <div>
                                                 <p><a class="btn btn-primary"
-                                                      href="{{route('admins.ProfileOrder.show', $order->id)}}">{{ __('How Works on it') }}</a>
+                                                      href="{{route('admins.ProfileOrder.show', $order->id)}}">{{ __('Who Works on it') }}</a>
                                                 </p>
                                             </div>
                                         </div>
